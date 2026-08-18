@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Baseline — Tennis Club &amp; Academy</title>
-<meta name="description" content="Baseline is a members' tennis club and academy where focused coaching meets championship courts." />
+<title>Resumos de Anatomia — o corpo todo em 12 sistemas</title>
+<meta name="description" content="Resumos de anatomia humana para alunos da saúde: 12 sistemas, ilustração ao lado do texto e correlação clínica. PDF digital, acesso imediato." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -45,7 +45,7 @@ input,textarea{font:inherit;color:inherit}
 a{color:inherit;text-decoration:none}
 ul,ol{list-style:none;padding:0}
 
-/* ====================== adaptive rem grid ========================== */
+/* ====================== grid rem adaptativo ======================== */
 html{font-size:16px;-webkit-text-size-adjust:100%}
 @media (max-width:1920px){html{font-size:0.833333vw}}
 @media (max-width:1440px){html{font-size:1.111111vw}}
@@ -73,13 +73,37 @@ body{
 main{width:100%;overflow-x:clip;padding:0.5rem}
 @media (min-width:640px){main{padding:0.75rem}}
 
-/* ====================== reveal primitives ========================== */
-.clip{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:0.14em}
-.line{display:block;overflow:hidden;padding-bottom:0.14em}
+/* ====================== primitivas de reveal ======================= */
+/*
+  As caixas de clip ganham folga no topo (padding-top) e devolvem essa folga
+  ao layout (margin-top negativo). Sem isso, line-height < 1 faz o
+  overflow:hidden cortar acentos de caixa alta — É, Ã, Ê.
+*/
+.clip{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0.3em 0 0.14em;margin-top:-0.3em}
+.line{display:block;overflow:hidden;padding:0.3em 0 0.14em;margin-top:-0.3em}
+/* flow-root impede que a margem negativa da 1ª linha colapse com o título */
+.section-title,.amostra-title,.footer-cta-title,.modal-title,.hero-tag{display:flow-root}
 .clip-inner{display:inline-block;transform:translateY(115%);opacity:0;will-change:transform,opacity}
 .wordf{display:inline-block;transform:translateY(18px);opacity:0;will-change:transform,opacity}
 
-/* ====================== shared components ========================== */
+/* ==================== placeholder de mockup =======================
+   Todo <img> de mockup usa um GIF 1x1 transparente, então o rótulo
+   desenhado em CSS aparece por baixo. Ao trocar o src pelo arquivo real,
+   a imagem opaca cobre o rótulo sozinha — nada mais precisa mudar.
+   ================================================================= */
+.ph{position:relative;background:var(--surface);overflow:hidden}
+.ph::after{
+  content:attr(data-ph);
+  position:absolute;inset:0;z-index:0;
+  display:grid;place-items:center;text-align:center;padding:1rem;
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:0.18em;
+  color:var(--ink-soft);line-height:1.6;
+}
+.ph > img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover}
+.ph.on-dark{background:rgba(255,255,255,.08)}
+.ph.on-dark::after{color:rgba(255,255,255,.55)}
+
+/* ======================= componentes comuns ======================== */
 .eyebrow{
   display:inline-flex;align-items:center;gap:0.5rem;
   font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.22em;
@@ -91,6 +115,12 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 }
 .eyebrow.light{color:rgba(255,255,255,.7)}
 .eyebrow.light::before{background:var(--brand-light)}
+
+.section-title{font-size:3rem;font-weight:500;line-height:0.95;letter-spacing:-0.02em;margin-top:1rem}
+.lede{font-size:1.0625rem;line-height:1.65;color:var(--ink-soft);margin-top:1.25rem;max-width:34rem}
+.lede.light{color:rgba(255,255,255,.7)}
+.head-center{max-width:44rem;margin-inline:auto;text-align:center}
+.head-center .lede{margin-inline:auto}
 
 .pill{
   display:inline-flex;align-items:center;gap:0.5rem;
@@ -106,6 +136,9 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 .pill.solid:hover{background:var(--brand-deep)}
 .pill.outline{border:1px solid currentColor;color:var(--ink)}
 .pill.outline:hover{background:var(--ink);color:#fff}
+.pill.ghost{border:1px solid rgba(255,255,255,.35);color:#fff}
+.pill.ghost:hover{background:rgba(255,255,255,.14)}
+.pill.block{display:flex;width:100%;justify-content:center}
 
 .arrowbtn{
   display:grid;place-items:center;
@@ -129,8 +162,6 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 }
 .dots.dark i{background:var(--ghost)}
 .dots.dark button[aria-current="true"] i{width:1.25rem;background:var(--ink)}
-.dots.light i{background:rgba(255,255,255,.4)}
-.dots.light button[aria-current="true"] i{width:1.25rem;background:#fff}
 
 .mark{flex:none}
 
@@ -170,188 +201,123 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
   border-radius:var(--radius-card-lg);
   background:var(--brand-deep);color:#fff;
   display:flex;flex-direction:column;
-  height:calc(100svh - 1rem);min-height:36rem;
+  min-height:calc(100svh - 1rem);
 }
-@media (min-width:640px){.hero{height:calc(100svh - 1.5rem)}}
+@media (min-width:640px){.hero{min-height:calc(100svh - 1.5rem)}}
 .hero-plate{position:absolute;inset:0;z-index:-10;overflow:hidden}
+/* sobredimensionado e deslocado pra cima: o parallax desloca 12% e nunca
+   expõe a borda do vídeo */
 .hero-plate-inner{position:absolute;left:0;right:0;top:-16%;height:132%;width:100%;will-change:transform}
-.hero-plate-inner img{width:100%;height:100%;object-fit:cover}
+.hero-plate-inner video{width:100%;height:100%;object-fit:cover}
 .hero-grad{
   position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(15,47,99,.65),rgba(15,47,99,.35),rgba(15,47,99,.75));
+  background:linear-gradient(to bottom,rgba(15,47,99,.55),rgba(15,47,99,.35),rgba(15,47,99,.9));
 }
-.hero-titlewrap{padding:1rem 1.5rem 0}
-@media (min-width:640px){.hero-titlewrap{padding:1rem 2.5rem 0}}
+.hero-titlewrap{padding:2rem 1.5rem 0}
+@media (min-width:640px){.hero-titlewrap{padding:2.5rem 2.5rem 0}}
 .hero-title{
   font-size:12.5vw;font-weight:500;text-transform:uppercase;
-  line-height:0.85;letter-spacing:-0.02em;white-space:nowrap;
+  line-height:0.85;letter-spacing:-0.02em;white-space:nowrap;margin-top:1rem;
 }
 .hero-bottom{
-  margin-top:auto;padding:0 1.5rem 2rem;
-  display:flex;flex-direction:column;gap:1.5rem;
+  margin-top:auto;padding:3rem 1.5rem 2rem;
+  display:flex;flex-direction:column;gap:2.5rem;
 }
 @media (min-width:640px){
-  .hero-bottom{padding:0 2.5rem 2.5rem;flex-direction:row;justify-content:space-between;align-items:flex-end}
+  .hero-bottom{padding:3rem 2.5rem 2.5rem;flex-direction:row;justify-content:space-between;align-items:flex-end;gap:2rem}
 }
+.hero-pitch{max-width:32rem}
 .hero-tag{
   font-size:2.4rem;font-weight:500;text-transform:uppercase;
-  line-height:0.95;letter-spacing:-0.02em;color:rgba(255,255,255,.85);
+  line-height:0.95;letter-spacing:-0.02em;color:rgba(255,255,255,.9);
 }
-.hero-cluster{display:flex;align-items:flex-end;gap:1rem}
+.hero-lede{
+  font-size:1rem;line-height:1.6;color:rgba(255,255,255,.82);
+  max-width:28rem;margin-top:1.25rem;
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.75rem}
+.hero-note{font-size:0.75rem;color:rgba(255,255,255,.6);margin-top:1rem;line-height:1.6;max-width:26rem}
 
 .glass{
   border:1px solid rgba(255,255,255,.15);
   background:rgba(255,255,255,.1);
   padding:0.75rem;
   border-radius:var(--radius-card);
-  box-shadow:0 1.25rem 2.5rem rgba(15,47,99,.2);
+  box-shadow:0 1.25rem 2.5rem rgba(15,47,99,.28);
   backdrop-filter:blur(12px);
 }
+.hero-mockup{width:100%;max-width:20rem}
+@media (min-width:640px){.hero-mockup{max-width:15rem}}
+.hero-mockup .ph{aspect-ratio:3/4;border-radius:0.75rem}
+.hero-mockup figcaption{
+  display:flex;align-items:baseline;justify-content:space-between;gap:0.5rem;
+  margin-top:0.75rem;padding:0 0.25rem 0.25rem;
+}
+.hero-mockup .mk-name{font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.12em}
+.hero-mockup .mk-meta{font-size:0.65rem;opacity:.75}
 
-.collection{display:none;width:16rem;flex-direction:column;gap:0.75rem}
-@media (min-width:768px){.collection{display:flex}}
-.coll-stage{position:relative}
-.coll-card{display:flex;gap:0.75rem;align-items:center;will-change:transform,opacity}
-.coll-card.is-out{position:absolute;inset:0.75rem}
-.coll-thumb{width:3.5rem;height:3.5rem;border-radius:0.75rem;object-fit:cover;flex:none}
-.coll-brand{font-size:0.7rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em}
-.coll-title{font-size:0.7rem;text-transform:uppercase;opacity:.8;margin-top:0.125rem}
-.coll-cta{display:inline-block;font-size:0.65rem;text-decoration:underline;margin-top:0.375rem}
+/* ============================== método ============================= */
+.metodo{background:var(--background);padding:5rem 1.5rem}
+@media (min-width:640px){.metodo{padding:6rem 2.5rem}}
+.diff-grid{display:grid;gap:2.5rem;margin-top:3.5rem}
+@media (min-width:768px){.diff-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem}}
+.diff-card{border-top:1px solid var(--hairline);padding-top:1.25rem;will-change:transform,opacity}
+.diff-title{font-size:1.25rem;font-weight:500;letter-spacing:-0.01em;line-height:1.2}
+.diff-body{font-size:0.875rem;color:var(--ink-soft);margin-top:0.75rem;line-height:1.7}
 
-.member{width:100%;max-width:20rem;display:flex;gap:0.75rem;align-items:stretch}
-@media (min-width:640px){.member{max-width:15rem}}
-.member-left{display:flex;flex-direction:column;justify-content:space-between;gap:0.75rem;flex:1}
-.member-val{font-size:1.875rem;font-weight:500;line-height:1}
-.avatars{display:flex}
-.avatars i{
-  display:block;width:1.25rem;height:1.25rem;border-radius:var(--radius-pill);
-  border:1px solid rgba(15,47,99,.4);
+/* =============================== como ============================== */
+.como{background:var(--surface);padding:6rem 1.5rem}
+@media (min-width:640px){.como{padding:6rem 2.5rem}}
+.step-list{margin-top:3.5rem}
+.step-row{display:block;border-top:1px solid var(--hairline)}
+.step-list li:last-child .step-row{border-bottom:1px solid var(--hairline)}
+.step-inner{display:flex;align-items:center;gap:1.5rem;padding:1.75rem 0;will-change:transform,opacity}
+.step-num{width:2.5rem;flex:none;font-size:0.875rem;font-weight:500;color:var(--ink-soft)}
+.step-body{flex:1}
+.step-name{font-size:1.5rem;font-weight:500;letter-spacing:-0.02em;line-height:1.1}
+@media (min-width:640px){.step-name{font-size:1.875rem}}
+.step-desc{font-size:0.875rem;color:var(--ink-soft);margin-top:0.375rem;max-width:38rem;line-height:1.6}
+.step-meta{
+  flex:none;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.16em;
+  color:var(--ink-soft);border:1px solid var(--hairline);
+  border-radius:var(--radius-pill);padding:0.375rem 0.875rem;display:none;
 }
-.avatars i + i{margin-left:-0.5rem}
-.member-cap{font-size:0.65rem;opacity:.8}
-.member-img{width:4rem;aspect-ratio:3/4;border-radius:0.75rem;object-fit:cover;flex:none}
+@media (min-width:768px){.step-meta{display:block}}
+.step-meta.is-pro{border-color:var(--brand);color:var(--brand)}
 
-/* =============================== trust ============================= */
-.trust{
-  position:relative;isolation:isolate;overflow:hidden;
-  background:var(--background);padding:4rem 1.5rem;
-}
-@media (min-width:640px){.trust{padding:5rem 2.5rem}}
-.trust-top{position:relative;z-index:20;display:flex;flex-direction:column;gap:1.5rem}
-@media (min-width:640px){
-  .trust-top{flex-direction:row;justify-content:space-between;align-items:flex-start;gap:2rem}
-}
-.pct{
-  width:7rem;height:7rem;border-radius:var(--radius-pill);background:var(--surface);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:0.75rem;flex:none;
-}
-@media (min-width:640px){.pct{width:8rem;height:8rem}}
-.pct b{font-size:1.5rem;font-weight:500;line-height:1}
-.pct small{
-  font-size:0.6rem;color:var(--ink-soft);max-width:7em;
-  margin-top:0.375rem;line-height:1.3;
-}
-.badge-card{
-  max-width:28rem;display:flex;gap:1rem;
-  border-radius:var(--radius-card);background:var(--surface);padding:1.25rem;
-}
-@media (min-width:640px){.badge-card{gap:1.25rem;padding:1.5rem}}
-.badge-chip{
-  border-radius:0.75rem;background:var(--background);
-  padding:0.5rem 1rem;font-size:1.25rem;font-weight:500;align-self:flex-start;
-}
-.badge-title{font-size:1.125rem;font-weight:500}
-.badge-body{font-size:0.75rem;color:var(--ink-soft);line-height:1.625;margin-top:0.5rem}
-
-.ghost-h{
-  position:relative;z-index:0;pointer-events:none;user-select:none;
-  max-width:88rem;margin:3rem auto 0;
-  font-size:8.2vw;font-weight:500;text-transform:uppercase;
-  line-height:1.02;letter-spacing:-0.02em;color:var(--ghost);
-}
-.ghost-row{display:flex;justify-content:space-between;align-items:baseline}
-.ghost-word{display:inline-block;overflow:hidden;padding-bottom:0.12em;will-change:transform}
-.ghost-word.ink{color:var(--ink)}
-
-.coach-pos{position:relative;z-index:10;display:flex;justify-content:center;margin-top:2.5rem}
-@media (min-width:640px){
-  .coach-pos{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;display:block}
-}
-.coach-inview{width:13rem;will-change:transform,opacity}
-@media (min-width:640px){.coach-inview{width:16rem}}
-.coach-fig{
-  position:relative;aspect-ratio:3/4;border-radius:var(--radius-card);
-  background:var(--brand);overflow:hidden;transform:rotate(6deg);
-}
-.coach-fig img{width:100%;height:100%;object-fit:cover}
-.glass-cap{
-  position:absolute;left:0.75rem;right:0.75rem;bottom:0.75rem;
-  border-radius:0.75rem;backdrop-filter:blur(10px);color:#fff;
-}
-.coach-cap{background:rgba(15,47,99,.4);padding:0.5rem 0.75rem}
-.coach-name{font-size:0.875rem;font-weight:500}
-.coach-role{font-size:0.65rem;opacity:.8}
-
-.trust-controls{
-  position:relative;z-index:20;margin-top:3rem;
-  display:flex;align-items:center;justify-content:space-between;
-}
-@media (min-width:640px){.trust-controls{margin-top:6rem}}
-
-/* ============================= programs ============================ */
-.programs{background:var(--surface);padding:6rem 1.5rem}
-@media (min-width:640px){.programs{padding:6rem 2.5rem}}
-.section-title{font-size:3rem;font-weight:500;line-height:0.95;letter-spacing:-0.02em;margin-top:1rem}
-.prog-list{margin-top:3.5rem}
-.prog-row{display:block;border-top:1px solid var(--hairline);transition:background-color .3s ease}
-.prog-list li:last-child .prog-row{border-bottom:1px solid var(--hairline)}
-.prog-row:focus-visible{background:var(--background)}
-.prog-inner{display:flex;align-items:center;gap:1.5rem;padding:1.75rem 0;will-change:transform,opacity}
-.prog-num{width:2.5rem;flex:none;font-size:0.875rem;font-weight:500;color:var(--ink-soft)}
-.prog-body{flex:1}
-.prog-name{font-size:1.5rem;font-weight:500;letter-spacing:-0.02em;line-height:1.1}
-@media (min-width:640px){.prog-name{font-size:1.875rem}}
-.prog-desc{font-size:0.875rem;color:var(--ink-soft);margin-top:0.375rem}
-.prog-arrow{
-  width:2.75rem;height:2.75rem;flex:none;border-radius:var(--radius-pill);
-  border:1px solid var(--hairline);display:grid;place-items:center;opacity:.55;
-}
-.prog-arrow .ic{width:1.25rem;height:1.25rem}
-
-/* ============================ facilities =========================== */
-.facilities{
+/* ============================== amostra ============================ */
+.amostra{
   position:relative;z-index:1;background:var(--background);
   border-radius:var(--radius-card-lg);margin-top:-2.5rem;
   padding:4rem 1.5rem 5rem;
 }
-@media (min-width:640px){.facilities{padding:4rem 2.5rem 5rem}}
-.fac-grid{display:grid;gap:2.5rem;align-items:end}
-@media (min-width:768px){.fac-grid{grid-template-columns:1fr 1fr}}
-.fac-intro{max-width:24rem}
-.fac-icon{width:4rem;height:4rem;border-radius:var(--radius-card);object-fit:cover;will-change:transform,opacity}
-.fac-title{font-size:3rem;font-weight:500;line-height:0.95;letter-spacing:-0.02em;margin-top:1.5rem}
-.fac-body{font-size:0.875rem;color:var(--ink-soft);max-width:20rem;margin-top:1.5rem;line-height:1.7}
-.fac-cards{display:flex;align-items:flex-end;gap:1.25rem}
-.fac-card{flex:1;will-change:transform,opacity}
-.fac-card:nth-child(2){margin-bottom:2rem}
-.fac-tile{
-  position:relative;aspect-ratio:3/4;border-radius:var(--radius-card);
-  overflow:hidden;background:var(--surface);
+@media (min-width:640px){.amostra{padding:4rem 2.5rem 5rem}}
+.amostra-grid{display:grid;gap:2.5rem;align-items:end}
+@media (min-width:768px){.amostra-grid{grid-template-columns:1fr 1fr}}
+.amostra-intro{max-width:24rem}
+.amostra-icon{width:4rem;height:4rem;border-radius:var(--radius-card);will-change:transform,opacity}
+.amostra-title{font-size:3rem;font-weight:500;line-height:0.95;letter-spacing:-0.02em;margin-top:1.5rem}
+.amostra-body{font-size:0.875rem;color:var(--ink-soft);max-width:20rem;margin-top:1.5rem;line-height:1.7}
+.sample-cards{display:flex;align-items:flex-end;gap:1.25rem}
+.sample-card{flex:1;will-change:transform,opacity}
+.sample-card:nth-child(2){margin-bottom:2rem}
+.sample-tile{aspect-ratio:3/4;border-radius:var(--radius-card)}
+.sample-tile > img{will-change:transform}
+.sample-cap{
+  position:absolute;left:0.75rem;right:0.75rem;bottom:0.75rem;z-index:2;
+  border-radius:0.75rem;backdrop-filter:blur(10px);color:#fff;padding:0.75rem 1rem;
 }
-.fac-tile img{width:100%;height:100%;object-fit:cover;will-change:transform}
-.fac-cap{padding:0.75rem 1rem}
-.fac-cap.clay{background:rgba(15,47,99,.4)}
-.fac-cap.blue{background:rgba(11,110,151,.55)}
-.fac-cap-name{font-size:0.875rem;font-weight:500}
-.fac-cap-desc{font-size:0.65rem;opacity:.85;margin-top:0.125rem}
+.sample-cap.a{background:rgba(15,47,99,.62)}
+.sample-cap.b{background:rgba(11,110,151,.66)}
+.sample-cap-name{font-size:0.875rem;font-weight:500}
+.sample-cap-desc{font-size:0.65rem;opacity:.9;margin-top:0.125rem;line-height:1.4}
 
-/* ============================== stats ============================== */
-.stats{
+/* ============================== números ============================ */
+.numeros{
   background:var(--brand-deep);color:#fff;
   border-radius:var(--radius-card-lg);margin-top:0.75rem;padding:5rem 1.5rem;
 }
-@media (min-width:640px){.stats{padding:5rem 2.5rem}}
+@media (min-width:640px){.numeros{padding:5rem 2.5rem}}
 .stats-grid{
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
   column-gap:2rem;row-gap:3rem;margin-top:4rem;
@@ -362,22 +328,167 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 @media (min-width:640px){.stat-val{font-size:4.5rem}}
 .stat-label{display:block;font-size:0.875rem;color:rgba(255,255,255,.65);margin-top:0.75rem}
 
-/* =========================== testimonials ========================== */
-.testimonials{background:var(--background);padding:5rem 1.5rem}
-@media (min-width:640px){.testimonials{padding:6rem 2.5rem}}
+/* ============================== ofertas ============================ */
+.ofertas{background:var(--surface);padding:6rem 1.5rem}
+@media (min-width:640px){.ofertas{padding:6rem 2.5rem}}
+.offer-grid{display:grid;gap:1.25rem;margin-top:3.5rem;align-items:stretch}
+@media (min-width:768px){.offer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.offer-card{
+  position:relative;display:flex;flex-direction:column;
+  border-radius:var(--radius-card-lg);background:var(--background);
+  border:1px solid var(--hairline);padding:1.75rem;will-change:transform,opacity;
+}
+@media (min-width:640px){.offer-card{padding:2rem}}
+.offer-card.featured{background:var(--brand-deep);color:#fff;border-color:transparent}
+.offer-media{aspect-ratio:16/10;border-radius:var(--radius-card);margin-bottom:1.5rem}
+.offer-badge{
+  position:absolute;top:1.25rem;right:1.25rem;z-index:3;
+  border-radius:var(--radius-pill);background:var(--brand-light);color:#fff;
+  padding:0.375rem 0.875rem;font-size:0.65rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:0.16em;
+}
+.offer-label{font-size:0.7rem;font-weight:500;text-transform:uppercase;letter-spacing:0.2em;color:var(--ink-soft)}
+.offer-card.featured .offer-label{color:rgba(255,255,255,.6)}
+.offer-title{font-size:2.25rem;font-weight:500;letter-spacing:-0.02em;line-height:1;margin-top:0.75rem}
+.offer-sub{font-size:0.875rem;color:var(--ink-soft);margin-top:0.5rem}
+.offer-card.featured .offer-sub{color:rgba(255,255,255,.7)}
+.offer-price{
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:0.5rem;
+  margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--hairline);
+}
+.offer-card.featured .offer-price{border-top-color:rgba(255,255,255,.2)}
+.offer-amount{font-size:3rem;font-weight:500;letter-spacing:-0.02em;line-height:1}
+.offer-terms{font-size:0.875rem;color:var(--ink-soft)}
+.offer-card.featured .offer-terms{color:rgba(255,255,255,.7)}
+.offer-per{width:100%;font-size:0.75rem;color:var(--ink-soft);margin-top:0.25rem}
+.offer-card.featured .offer-per{color:rgba(255,255,255,.6)}
+.offer-desc{font-size:0.9375rem;line-height:1.6;color:var(--ink-soft);margin-top:1.25rem}
+.offer-card.featured .offer-desc{color:rgba(255,255,255,.8)}
+.offer-bullets{margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;font-size:0.875rem;line-height:1.5}
+.offer-bullets li{display:flex;gap:0.75rem;align-items:flex-start}
+.offer-bullets .ic{width:1.0625rem;height:1.0625rem;flex:none;color:var(--brand);margin-top:0.1875rem}
+.offer-card.featured .offer-bullets .ic{color:var(--brand-light)}
+.offer-group{
+  display:block;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.2em;
+  color:var(--ink-soft);margin-top:0.75rem;
+}
+.offer-card.featured .offer-group{color:rgba(255,255,255,.55)}
+.offer-cta{margin-top:auto;padding-top:2rem}
+.guarantee{
+  display:flex;align-items:flex-start;justify-content:center;gap:0.75rem;
+  margin-top:2.5rem;font-size:0.875rem;color:var(--ink-soft);
+  max-width:34rem;margin-inline:auto;line-height:1.6;
+}
+.guarantee .ic{width:1.25rem;height:1.25rem;flex:none;color:var(--brand);margin-top:0.125rem}
+
+/* ============================= sistemas ============================ */
+.sistemas{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:var(--background);padding:4rem 1.5rem;
+}
+@media (min-width:640px){.sistemas{padding:5rem 2.5rem}}
+.sis-top{position:relative;z-index:20;display:flex;flex-direction:column;gap:1.5rem}
+@media (min-width:640px){
+  .sis-top{flex-direction:row;justify-content:space-between;align-items:flex-start;gap:2rem}
+}
+.pct{
+  width:7rem;height:7rem;border-radius:var(--radius-pill);background:var(--surface);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:0.75rem;flex:none;
+}
+@media (min-width:640px){.pct{width:8rem;height:8rem}}
+.pct b{font-size:1.5rem;font-weight:500;line-height:1}
+.pct small{font-size:0.6rem;color:var(--ink-soft);max-width:7em;margin-top:0.375rem;line-height:1.3}
+.autor-card{
+  max-width:28rem;display:flex;gap:1rem;align-items:flex-start;
+  border-radius:var(--radius-card);background:var(--surface);padding:1.25rem;
+}
+@media (min-width:640px){.autor-card{gap:1.25rem;padding:1.5rem}}
+.autor-foto{width:4rem;height:4rem;flex:none;border-radius:0.75rem}
+.autor-nome{font-size:1.125rem;font-weight:500}
+.autor-cargo{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--ink-soft);margin-top:0.25rem}
+.autor-body{font-size:0.75rem;color:var(--ink-soft);line-height:1.625;margin-top:0.625rem}
+.ghost-h{
+  position:relative;z-index:0;pointer-events:none;user-select:none;
+  max-width:88rem;margin:3rem auto 0;
+  font-size:8.2vw;font-weight:500;text-transform:uppercase;
+  line-height:1.02;letter-spacing:-0.02em;color:var(--ghost);
+}
+.ghost-row{display:flex;justify-content:space-between;align-items:baseline}
+.ghost-word{display:inline-block;overflow:hidden;padding:0.28em 0 0.14em;margin-top:-0.28em;will-change:transform}
+.ghost-word.ink{color:var(--ink)}
+.sis-pos{position:relative;z-index:10;display:flex;justify-content:center;margin-top:2.5rem}
+@media (min-width:640px){
+  .sis-pos{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;display:block}
+}
+.sis-inview{width:13rem;will-change:transform,opacity}
+@media (min-width:640px){.sis-inview{width:16rem}}
+.sis-fig{
+  position:relative;aspect-ratio:3/4;border-radius:var(--radius-card);
+  overflow:hidden;transform:rotate(6deg);
+  box-shadow:0 1.5rem 3rem rgba(15,47,99,.18);
+}
+.sis-cap{
+  position:absolute;left:0.75rem;right:0.75rem;bottom:0.75rem;z-index:2;
+  border-radius:0.75rem;backdrop-filter:blur(10px);color:#fff;
+  background:rgba(15,47,99,.62);padding:0.5rem 0.75rem;
+}
+.sis-name{font-size:0.875rem;font-weight:500}
+.sis-role{font-size:0.65rem;opacity:.85}
+.sis-controls{
+  position:relative;z-index:20;margin-top:3rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+@media (min-width:640px){.sis-controls{margin-top:6rem}}
+
+/* =========================== depoimentos =========================== */
+.depoimentos{background:var(--surface);padding:5rem 1.5rem}
+@media (min-width:640px){.depoimentos{padding:6rem 2.5rem}}
 .testi-grid{display:grid;gap:1.25rem;margin-top:3.5rem}
 @media (min-width:768px){.testi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .testi-item{will-change:transform,opacity}
 .testi-card{
   display:flex;flex-direction:column;justify-content:space-between;height:100%;
-  border-radius:var(--radius-card);background:var(--surface);padding:1.75rem;
+  border-radius:var(--radius-card);background:var(--background);padding:1.75rem;
   will-change:transform;
 }
-.testi-quote{display:block;font-size:2.25rem;color:var(--brand);line-height:1}
-.testi-card blockquote{font-size:1.125rem;line-height:1.625;color:var(--ink);margin-top:1rem}
+.testi-tag{
+  display:inline-block;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.16em;
+  color:var(--ink-soft);border:1px solid var(--hairline);
+  border-radius:var(--radius-pill);padding:0.3125rem 0.75rem;
+}
+.testi-card blockquote{font-size:1.0625rem;line-height:1.6;color:var(--ink);margin-top:1.25rem}
 .testi-card figcaption{border-top:1px solid var(--hairline);padding-top:1rem;margin-top:1.5rem}
 .testi-name{font-weight:500}
 .testi-role{font-size:0.875rem;color:var(--ink-soft)}
+
+/* =============================== faq =============================== */
+.faq{background:var(--background);padding:5rem 1.5rem}
+@media (min-width:640px){.faq{padding:6rem 2.5rem}}
+.faq-list{margin-top:3rem;max-width:52rem}
+.faq-item{border-top:1px solid var(--hairline);will-change:transform,opacity}
+.faq-item:last-child{border-bottom:1px solid var(--hairline)}
+.faq-item summary{
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  padding:1.5rem 0;font-size:1.0625rem;font-weight:500;cursor:pointer;
+  list-style:none;line-height:1.35;
+}
+@media (min-width:640px){.faq-item summary{font-size:1.125rem}}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-toggle{
+  width:2rem;height:2rem;flex:none;border-radius:var(--radius-pill);
+  border:1px solid var(--hairline);display:grid;place-items:center;
+  transition:transform .4s cubic-bezier(.16,1,.3,1),background-color .3s ease,
+             color .3s ease,border-color .3s ease;
+}
+.faq-toggle .ic{width:1rem;height:1rem}
+.faq-item[open] .faq-toggle{
+  transform:rotate(45deg);background:var(--ink);color:#fff;border-color:var(--ink);
+}
+.faq-answer{
+  font-size:0.9375rem;color:var(--ink-soft);line-height:1.7;
+  padding-bottom:1.75rem;max-width:44rem;
+}
 
 /* ============================== footer ============================= */
 .footer{
@@ -393,6 +504,7 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
   .footer-cta{flex-direction:row;justify-content:space-between;align-items:flex-end}
 }
 .footer-cta-title{font-size:3.75rem;font-weight:500;line-height:0.92;letter-spacing:-0.02em;margin-top:1rem}
+.footer-cta-actions{display:flex;flex-wrap:wrap;gap:0.75rem}
 .footer-cols{display:grid;gap:2.5rem;padding:3.5rem 0}
 @media (min-width:768px){.footer-cols{grid-template-columns:1.4fr 1fr 1fr 1fr}}
 .footer-brand{max-width:20rem}
@@ -403,8 +515,8 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 .footer-address a:hover{text-decoration:underline}
 .footer-address .muted{color:rgba(255,255,255,.55)}
 .footer-colhead{font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,.5)}
-.footer-links{margin-top:1.25rem;font-size:0.875rem;color:rgba(255,255,255,.8);display:flex;flex-direction:column;gap:0.75rem}
-.footer-links a:hover{color:#fff}
+.footer-links{margin-top:1.25rem;font-size:0.875rem;color:rgba(255,255,255,.8);display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start}
+.footer-links a:hover,.footer-links button:hover{color:#fff}
 .footer-bottom{
   border-top:1px solid rgba(255,255,255,.15);padding-top:2rem;
   font-size:0.875rem;color:rgba(255,255,255,.6);
@@ -434,12 +546,12 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 }
 .iconbtn:hover{background:rgba(255,255,255,.25)}
 .iconbtn .ic{width:1.25rem;height:1.25rem}
-.menu-nav{flex:1;display:flex;flex-direction:column;justify-content:center;gap:0.5rem}
+.menu-nav{flex:1;display:flex;flex-direction:column;justify-content:center;gap:0.25rem}
 .menu-link{
-  display:block;font-size:3rem;font-weight:500;letter-spacing:-0.02em;line-height:1.05;
+  display:block;font-size:2.5rem;font-weight:500;letter-spacing:-0.02em;line-height:1.15;
   transition:color .3s ease;will-change:transform,opacity;
 }
-@media (min-width:640px){.menu-link{font-size:4.5rem}}
+@media (min-width:640px){.menu-link{font-size:3.75rem}}
 .menu-link:hover{color:var(--brand-light)}
 .menu-bottom{
   border-top:1px solid rgba(255,255,255,.15);padding-top:2rem;
@@ -474,7 +586,8 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 }
 .modal-close:hover{background:var(--hairline)}
 .modal-close .ic{width:1.25rem;height:1.25rem}
-.modal-form{margin-top:1.75rem;display:flex;flex-direction:column;gap:1rem}
+.modal-note{font-size:0.875rem;color:var(--ink-soft);margin-top:1rem;line-height:1.6}
+.modal-form{margin-top:1.5rem;display:flex;flex-direction:column;gap:1rem}
 .field{display:flex;flex-direction:column;gap:0.5rem}
 .field label{font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.18em;color:var(--ink-soft)}
 .field input,.field textarea{
@@ -538,90 +651,357 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
   <section class="hero">
     <div class="hero-plate" aria-hidden="true">
       <div class="hero-plate-inner" id="hero-plate-inner">
-        <img
-          src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/hero/hero-court.webp"
-          alt="Player lunging for a shot on a hard court" fetchpriority="high" loading="eager" decoding="async" />
+        <video id="hero-video" src="assets/banner-anatomia.mp4"
+               autoplay muted loop playsinline preload="auto"></video>
       </div>
       <div class="hero-grad"></div>
     </div>
 
     <header class="site-header">
-      <nav class="hdr-nav" aria-label="Primary">
-        <a href="#programs" data-scroll>Programs &amp; Coaches</a>
-        <a href="#facilities" data-scroll>Club &amp; Events</a>
+      <nav class="hdr-nav" aria-label="Navegação principal">
+        <a href="#amostra" data-scroll>Ver por dentro</a>
+        <a href="#ofertas" data-scroll>Pacotes</a>
       </nav>
 
       <div class="hdr-brand">
-        <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/>
-          <path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+        <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 21c-1.2-3.6-3.6-5.4-5.4-7.2A5.4 5.4 0 0 1 12 6.6a5.4 5.4 0 0 1 5.4 7.2c-1.8 1.8-4.2 3.6-5.4 7.2z"/>
+          <path d="M12 6.6V3"/>
         </svg>
-        <span>Baseline</span>
+        <span>Anatomia</span>
       </div>
 
       <div class="hdr-right">
-        <button type="button" class="hdr-book" data-open-modal>Book a Visit</button>
-        <button type="button" class="burger" id="burger" aria-label="Open menu" aria-haspopup="dialog">
+        <button type="button" class="hdr-book" data-open-modal>Tirar dúvida</button>
+        <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-haspopup="dialog">
           <i></i><i></i>
         </button>
       </div>
     </header>
 
     <div class="hero-titlewrap">
-      <h1 class="hero-title" id="hero-title">Own The Court</h1>
+      <span class="eyebrow light" id="hero-eyebrow">Resumos de anatomia humana</span>
+      <h1 class="hero-title" id="hero-title">Corpo Todo</h1>
     </div>
 
     <div class="hero-bottom">
-      <p class="hero-tag" id="hero-tag">
-        <span class="line"><span class="clip-inner">Show Up,</span></span>
-        <span class="line"><span class="clip-inner">Level Up</span></span>
-      </p>
+      <div class="hero-pitch">
+        <p class="hero-tag" id="hero-tag">
+          <span class="line"><span class="clip-inner">Doze sistemas,</span></span>
+          <span class="line"><span class="clip-inner">um resumo só</span></span>
+        </p>
+        <p class="hero-lede" id="hero-lede">O corpo humano inteiro resumido pra estudar antes da prova: ilustração ao lado do texto, termos em destaque e a correlação clínica de cada sistema.</p>
+        <div class="hero-actions" id="hero-actions">
+          <a class="pill light" href="#ofertas" data-scroll>
+            <span>Ver os pacotes</span>
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="pill ghost" href="#amostra" data-scroll>
+            <span>Ver por dentro</span>
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <p class="hero-note">PDF digital com acesso imediato. Feito para medicina, enfermagem, fisioterapia e educação física.</p>
+      </div>
 
       <div class="hero-cluster">
-        <div class="collection" id="collection">
-          <div class="coll-stage glass" id="coll-stage"></div>
-          <div class="dots light" id="coll-dots" role="group" aria-label="Collections"></div>
-        </div>
-
-        <article class="member glass" id="member">
-          <div class="member-left">
-            <p class="member-val">9K+</p>
-            <div class="avatars" aria-hidden="true">
-              <i style="background:#5790e6"></i>
-              <i style="background:#c2e029"></i>
-              <i style="background:#0b6e97"></i>
-              <i style="background:#ffffff"></i>
-            </div>
-            <p class="member-cap">Members on court</p>
+        <figure class="hero-mockup glass" id="hero-mockup">
+          <!-- TODO: trocar o src pelo mockup real da capa (proporção 3/4) -->
+          <div class="ph on-dark" data-ph="Mockup da capa">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                 alt="Capa do material de resumos de anatomia" />
           </div>
-          <img class="member-img"
-            src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/1.webp"
-            alt="Player waiting to return on a clay court" loading="lazy" decoding="async" />
-        </article>
+          <figcaption>
+            <span class="mk-name">Resumos de Anatomia</span>
+            <span class="mk-meta">12 sistemas</span>
+          </figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
-  <!-- ============================== TRUST ============================= -->
-  <section class="trust" id="trust" aria-labelledby="trust-title">
-    <div class="trust-top">
-      <div class="pct" id="pct-badge">
-        <b>100%</b>
-        <small>Coaching built around your game</small>
+  <!-- ============================= MÉTODO ============================= -->
+  <section class="metodo" id="metodo" aria-labelledby="metodo-title">
+    <span class="eyebrow">Por que esse material</span>
+    <h2 class="section-title" id="metodo-title">
+      <span class="line"><span class="clip-inner">O que muda quando o</span></span>
+      <span class="line"><span class="clip-inner">resumo é feito pra estudar</span></span>
+    </h2>
+    <p class="lede">Resumo de anatomia costuma ser bonito de ver e ruim de usar: figura de um lado, texto do outro, e nada indicando o que realmente cai. Aqui a página foi montada na ordem em que você estuda.</p>
+
+    <div class="diff-grid">
+      <article class="diff-card">
+        <h3 class="diff-title">Cada sistema cabe numa sessão</h3>
+        <p class="diff-body">Um sistema fecha em um bloco que você lê inteiro antes da prova. Não precisa garimpar no calhamaço o que interessa — o recorte já foi feito.</p>
+      </article>
+      <article class="diff-card">
+        <h3 class="diff-title">A ilustração fica ao lado do texto</h3>
+        <p class="diff-body">A imagem está na mesma página do conteúdo que ela explica. Você não perde o raciocínio virando página atrás da figura, que é onde a maioria dos resumos falha.</p>
+      </article>
+      <article class="diff-card">
+        <h3 class="diff-title">Correlação clínica em cada sistema</h3>
+        <p class="diff-body">Onde aquela estrutura aparece na prática: o que lesiona, o que dói, o que aparece na prova. É a âncora que faz o nome parar em pé na memória.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================== COMO ============================== -->
+  <section class="como" id="como" aria-labelledby="como-title">
+    <span class="eyebrow">Como você usa</span>
+    <h2 class="section-title" id="como-title">
+      <span class="line"><span class="clip-inner">O ciclo de estudo,</span></span>
+      <span class="line"><span class="clip-inner">nessa ordem</span></span>
+    </h2>
+    <p class="lede">Quatro passos por sistema. Os dois primeiros estão nos dois pacotes; os dois últimos vêm no Pacote Completo.</p>
+
+    <ul class="step-list">
+      <li>
+        <div class="step-row">
+          <div class="step-inner">
+            <span class="step-num">01</span>
+            <div class="step-body">
+              <h3 class="step-name">Abre no sistema que cai</h3>
+              <p class="step-desc">Doze blocos independentes. Você vai direto no que a sua prova cobra, sem ler o material inteiro pra achar o começo.</p>
+            </div>
+            <span class="step-meta">Nos dois</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-row">
+          <div class="step-inner">
+            <span class="step-num">02</span>
+            <div class="step-body">
+              <h3 class="step-name">Lê o resumo com a figura junto</h3>
+              <p class="step-desc">Texto enxuto, termos em destaque e a ilustração na mesma página. No fim de cada sistema, a correlação clínica amarra tudo.</p>
+            </div>
+            <span class="step-meta">Nos dois</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-row">
+          <div class="step-inner">
+            <span class="step-num">03</span>
+            <div class="step-body">
+              <h3 class="step-name">Fixa nos flashcards</h3>
+              <p class="step-desc">Os nomes que mais somem na hora da prova viram carta de repetição espaçada, já separadas por sistema.</p>
+            </div>
+            <span class="step-meta is-pro">Completo</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-row">
+          <div class="step-inner">
+            <span class="step-num">04</span>
+            <div class="step-body">
+              <h3 class="step-name">Testa no banco de questões</h3>
+              <p class="step-desc">Questões no formato das provas, com gabarito comentado que devolve você pra página exata do resumo quando erra.</p>
+            </div>
+            <span class="step-meta is-pro">Completo</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============================= AMOSTRA ============================ -->
+  <section class="amostra" id="amostra" aria-labelledby="amostra-title">
+    <div class="amostra-grid">
+      <div class="amostra-intro">
+        <!-- TODO: trocar o src por um recorte de página (quadrado) -->
+        <div class="ph amostra-icon" id="amostra-icon" data-ph="">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
+        </div>
+        <h2 class="amostra-title" id="amostra-title">
+          <span class="line"><span class="clip-inner">Veja por dentro</span></span>
+          <span class="line"><span class="clip-inner">antes de</span></span>
+          <span class="line"><span class="clip-inner">comprar</span></span>
+        </h2>
+        <p class="amostra-body" id="amostra-body">Duas páginas reais do material, do jeito que elas chegam pra você. Sem página de rosto, sem enchimento: abre e já está no conteúdo.</p>
       </div>
 
-      <article class="badge-card" id="badge-card">
-        <span class="badge-chip">#01</span>
-        <div>
-          <h3 class="badge-title">Trusted by serious players</h3>
-          <p class="badge-body">From first-timers to nationally ranked juniors, players train here because the progress shows up on the scoreboard.</p>
+      <div class="sample-cards">
+        <figure class="sample-card">
+          <!-- TODO: trocar o src pela página de amostra 1 (proporção 3/4) -->
+          <div class="ph sample-tile" data-ph="Página de amostra">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                 alt="Página do resumo de sistema locomotor" />
+            <figcaption class="sample-cap a">
+              <span class="sample-cap-name">Sistema locomotor</span>
+              <span class="sample-cap-desc">Osso, inserção e ação, com a figura na mesma página.</span>
+            </figcaption>
+          </div>
+        </figure>
+        <figure class="sample-card">
+          <!-- TODO: trocar o src pela página de amostra 2 (proporção 3/4) -->
+          <div class="ph sample-tile" data-ph="Página de amostra">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                 alt="Página do resumo de sistema cardiovascular" />
+            <figcaption class="sample-cap b">
+              <span class="sample-cap-name">Correlação clínica</span>
+              <span class="sample-cap-desc">O que lesiona, o que dói e o que costuma cair na prova.</span>
+            </figcaption>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= NÚMEROS ============================ -->
+  <section class="numeros" id="numeros" aria-labelledby="numeros-title">
+    <span class="eyebrow light">O material em números</span>
+    <h2 class="section-title" id="numeros-title">
+      <span class="line"><span class="clip-inner">O corpo humano</span></span>
+      <span class="line"><span class="clip-inner">inteiro, resumido</span></span>
+    </h2>
+
+    <dl class="stats-grid">
+      <div class="stat">
+        <dt class="sr-only">Sistemas cobertos</dt>
+        <dd><span class="stat-val">12</span><span class="stat-label">Sistemas cobertos</span></dd>
+      </div>
+      <div class="stat">
+        <dt class="sr-only">Páginas de resumo</dt>
+        <dd><span class="stat-val">480</span><span class="stat-label">Páginas de resumo</span></dd>
+      </div>
+      <div class="stat">
+        <dt class="sr-only">Ilustrações</dt>
+        <dd><span class="stat-val">340</span><span class="stat-label">Ilustrações</span></dd>
+      </div>
+      <div class="stat">
+        <dt class="sr-only">Alunos usando</dt>
+        <dd><span class="stat-val">6K+</span><span class="stat-label">Alunos usando</span></dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ============================= OFERTAS ============================ -->
+  <section class="ofertas" id="ofertas" aria-labelledby="ofertas-title">
+    <div class="head-center">
+      <span class="eyebrow">Os pacotes</span>
+      <h2 class="section-title" id="ofertas-title">
+        <span class="line"><span class="clip-inner">Escolha o que resolve</span></span>
+        <span class="line"><span class="clip-inner">a sua próxima prova</span></span>
+      </h2>
+      <p class="lede">Um te dá o conteúdo resumido. O outro te dá o conteúdo mais as duas ferramentas que fazem ele grudar. Pagamento único nos dois.</p>
+    </div>
+
+    <div class="offer-grid">
+      <!-- ---------- pacote 1 ---------- -->
+      <article class="offer-card">
+        <!-- TODO: trocar o src pelo mockup do pacote 1 (proporção 16/10) -->
+        <div class="ph offer-media" data-ph="Mockup dos resumos">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               alt="Mockup do material Resumos de Anatomia" />
+        </div>
+
+        <p class="offer-label">Para estudar o corpo todo</p>
+        <h3 class="offer-title">Resumos de Anatomia</h3>
+        <p class="offer-sub">12 sistemas · PDF digital</p>
+
+        <div class="offer-price">
+          <span class="offer-amount">R$ 37</span>
+          <span class="offer-terms">pagamento único</span>
+          <span class="offer-per">≈ R$ 3 por sistema</span>
+        </div>
+
+        <p class="offer-desc">O conteúdo resumido do corpo inteiro, na ordem em que você estuda. Serve pra semana da prova e pra consulta rápida depois.</p>
+
+        <ul class="offer-bullets">
+          <li class="offer-group">O que vem</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Os 12 sistemas do corpo humano, cada um em bloco próprio</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>340 ilustrações posicionadas ao lado do texto que explicam</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Correlação clínica no fechamento de cada sistema</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Terminologia anatômica oficial, com o nome popular ao lado</li>
+          <li class="offer-group">Como você recebe</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>PDF liberado na hora, no e-mail do checkout</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Leitura no celular, no computador ou impresso</li>
+        </ul>
+
+        <div class="offer-cta">
+          <!-- TODO: cole aqui a URL de checkout deste pacote -->
+          <a href="#" class="pill outline block" data-checkout="Resumos de Anatomia" data-sku="resumos" data-price="37.00">
+            <span>Quero os resumos</span>
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- ---------- pacote 2 (destaque) ---------- -->
+      <article class="offer-card featured">
+        <span class="offer-badge">Mais completo</span>
+        <!-- TODO: trocar o src pelo mockup do pacote 2 (proporção 16/10) -->
+        <div class="ph on-dark offer-media" data-ph="Mockup do pacote completo">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               alt="Mockup do Pacote Completo com resumos, flashcards e questões" />
+        </div>
+
+        <p class="offer-label">Para fixar e testar</p>
+        <h3 class="offer-title">Pacote Completo</h3>
+        <p class="offer-sub">Resumos + flashcards + questões</p>
+
+        <div class="offer-price">
+          <span class="offer-amount">R$ 67</span>
+          <span class="offer-terms">pagamento único</span>
+          <span class="offer-per">≈ R$ 5,60 por sistema</span>
+        </div>
+
+        <p class="offer-desc">Ler não é lembrar. Aqui entram as duas ferramentas que transformam a leitura em memória: repetição espaçada e questão comentada.</p>
+
+        <ul class="offer-bullets">
+          <li class="offer-group">Tudo dos Resumos, mais</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Baralho de flashcards separado por sistema</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Banco de questões no formato das provas</li>
+          <li class="offer-group">Pra fixar</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Cartas prontas pra importar no app de repetição espaçada</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Foco nos termos que mais somem na hora da prova</li>
+          <li class="offer-group">Pra testar</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Gabarito comentado que aponta a página exata do resumo</li>
+          <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Atualizações do material sem custo adicional</li>
+        </ul>
+
+        <div class="offer-cta">
+          <!-- TODO: cole aqui a URL de checkout deste pacote -->
+          <a href="#" class="pill light block" data-checkout="Pacote Completo" data-sku="completo" data-price="67.00">
+            <span>Quero o pacote completo</span>
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
       </article>
     </div>
 
-    <h2 class="ghost-h" id="trust-title">
-      <span class="sr-only" id="trust-title-sr">Expert Result- Driven Coaching</span>
+    <p class="guarantee">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Sete dias de garantia. Baixou, abriu e não era o que você esperava? Devolvemos o valor integral — sem formulário e sem conversa de retenção.</span>
+    </p>
+  </section>
+
+  <!-- ============================ SISTEMAS ============================ -->
+  <section class="sistemas" id="sistemas" aria-labelledby="sistemas-title">
+    <div class="sis-top">
+      <div class="pct" id="pct-badge">
+        <b>12</b>
+        <small>sistemas, do locomotor ao nervoso</small>
+      </div>
+
+      <!-- TODO: trocar nome, cargo e foto pelo autor real -->
+      <article class="autor-card" id="autor-card">
+        <div class="ph autor-foto" data-ph="">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               alt="Retrato da autora do material" />
+        </div>
+        <div>
+          <h3 class="autor-nome">Helena Vasques</h3>
+          <p class="autor-cargo">Professora de anatomia humana</p>
+          <p class="autor-body">Doze anos dando aula de anatomia na graduação. O material nasceu do resumo que ela passava pros próprios alunos na semana da prova — e que começou a circular sozinho entre as turmas.</p>
+        </div>
+      </article>
+    </div>
+
+    <h2 class="ghost-h" id="sistemas-title">
+      <span class="sr-only" id="sistemas-title-sr">Estuda menos, lembra mais</span>
       <span class="ghost-row" aria-hidden="true">
         <span class="ghost-word" data-gw="0"><span class="clip-inner"></span></span>
         <span class="ghost-word" data-gw="1"><span class="clip-inner"></span></span>
@@ -632,28 +1012,28 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
       </span>
     </h2>
 
-    <div class="coach-pos">
-      <div class="coach-inview" id="coach-inview">
-        <figure class="coach-fig">
-          <img id="coach-img"
-            src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/5.webp"
-            alt="Head coach set in a ready stance on clay" loading="lazy" decoding="async" />
-          <figcaption class="glass-cap coach-cap">
-            <span class="coach-name" id="coach-name">Marco Vidal</span>
-            <span class="coach-role" id="coach-role" style="display:block">Head Coach</span>
+    <div class="sis-pos">
+      <div class="sis-inview" id="sis-inview">
+        <figure class="ph sis-fig" id="sis-fig" data-ph="Página do sistema">
+          <!-- TODO: trocar o src pela página de amostra deste sistema -->
+          <img id="sis-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               alt="Página do resumo do sistema locomotor" />
+          <figcaption class="sis-cap">
+            <span class="sis-name" id="sis-name">Sistema locomotor</span>
+            <span class="sis-role" id="sis-role" style="display:block">Osso, músculo e articulação</span>
           </figcaption>
         </figure>
       </div>
     </div>
 
-    <div class="trust-controls">
-      <button type="button" class="arrowbtn outline" id="coach-prev" aria-label="Previous coach">
+    <div class="sis-controls">
+      <button type="button" class="arrowbtn outline" id="sis-prev" aria-label="Sistema anterior">
         <span class="ic-wrap">
           <svg class="ic flip-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </button>
-      <div class="dots dark" id="coach-dots" role="group" aria-label="Coaches"></div>
-      <button type="button" class="arrowbtn solid" id="coach-next" aria-label="Next coach">
+      <div class="dots dark" id="sis-dots" role="group" aria-label="Sistemas"></div>
+      <button type="button" class="arrowbtn solid" id="sis-next" aria-label="Próximo sistema">
         <span class="ic-wrap">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -661,266 +1041,186 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
     </div>
   </section>
 
-  <!-- ============================ PROGRAMS ============================ -->
-  <section class="programs" id="programs" aria-labelledby="programs-title">
-    <span class="eyebrow">Training programs</span>
-    <h2 class="section-title" id="programs-title">
-      <span class="line"><span class="clip-inner">Built for</span></span>
-      <span class="line"><span class="clip-inner">every level</span></span>
-    </h2>
-
-    <ul class="prog-list">
-      <li>
-        <a class="prog-row" href="#junior">
-          <div class="prog-inner">
-            <span class="prog-num">01</span>
-            <div class="prog-body">
-              <span class="prog-name">Junior Development</span>
-              <p class="prog-desc">Fundamentals, footwork, and match play for ages 6–14.</p>
-            </div>
-            <span class="prog-arrow" aria-hidden="true">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </span>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a class="prog-row" href="#performance">
-          <div class="prog-inner">
-            <span class="prog-num">02</span>
-            <div class="prog-body">
-              <span class="prog-name">Performance Squad</span>
-              <p class="prog-desc">High-volume training for competitive and ranked players.</p>
-            </div>
-            <span class="prog-arrow" aria-hidden="true">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </span>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a class="prog-row" href="#adult">
-          <div class="prog-inner">
-            <span class="prog-num">03</span>
-            <div class="prog-body">
-              <span class="prog-name">Adult Clinics</span>
-              <p class="prog-desc">Small-group sessions to sharpen technique and fitness.</p>
-            </div>
-            <span class="prog-arrow" aria-hidden="true">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </span>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a class="prog-row" href="#private">
-          <div class="prog-inner">
-            <span class="prog-num">04</span>
-            <div class="prog-body">
-              <span class="prog-name">Private Coaching</span>
-              <p class="prog-desc">One-to-one sessions tailored to your goals and schedule.</p>
-            </div>
-            <span class="prog-arrow" aria-hidden="true">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </span>
-          </div>
-        </a>
-      </li>
-    </ul>
-  </section>
-
-  <!-- =========================== FACILITIES =========================== -->
-  <section class="facilities" id="facilities" aria-labelledby="facilities-title">
-    <div class="fac-grid">
-      <div class="fac-intro">
-        <img class="fac-icon" id="fac-icon"
-          src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/3.webp"
-          alt="Player stretching for a forehand on clay" loading="lazy" decoding="async" />
-        <h2 class="fac-title" id="facilities-title">
-          <span class="line"><span class="clip-inner">Tour Our</span></span>
-          <span class="line"><span class="clip-inner">World-Class</span></span>
-          <span class="line"><span class="clip-inner">Courts</span></span>
-        </h2>
-        <p class="fac-body" id="fac-body">Reserve a court for focused practice, squad drills, or private sessions — and train in the same conditions you'll compete in.</p>
-      </div>
-
-      <div class="fac-cards">
-        <figure class="fac-card">
-          <div class="fac-tile">
-            <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/1.webp"
-              alt="Player on the baseline of an outdoor clay court" loading="lazy" decoding="async" />
-            <figcaption class="glass-cap fac-cap clay">
-              <span class="fac-cap-name">Redline Clay</span>
-              <span class="fac-cap-desc" style="display:block">A fast outdoor clay court tuned for long, physical rallies.</span>
-            </figcaption>
-          </div>
-        </figure>
-        <figure class="fac-card">
-          <div class="fac-tile">
-            <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/4.webp"
-              alt="Player following through on a blue hard court" loading="lazy" decoding="async" />
-            <figcaption class="glass-cap fac-cap blue">
-              <span class="fac-cap-name">Harbor Court</span>
-              <span class="fac-cap-desc" style="display:block">A sheltered hard court built for precision and night play.</span>
-            </figcaption>
-          </div>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================== STATS ============================= -->
-  <section class="stats" aria-labelledby="stats-title">
-    <span class="eyebrow light">By the numbers</span>
-    <h2 class="section-title" id="stats-title">
-      <span class="line"><span class="clip-inner">A club that</span></span>
-      <span class="line"><span class="clip-inner">keeps score</span></span>
-    </h2>
-
-    <dl class="stats-grid">
-      <div class="stat">
-        <dt class="sr-only">Certified coaches</dt>
-        <dd><span class="stat-val">24</span><span class="stat-label">Certified coaches</span></dd>
-      </div>
-      <div class="stat">
-        <dt class="sr-only">Championship courts</dt>
-        <dd><span class="stat-val">12</span><span class="stat-label">Championship courts</span></dd>
-      </div>
-      <div class="stat">
-        <dt class="sr-only">Members training</dt>
-        <dd><span class="stat-val">9K+</span><span class="stat-label">Members training</span></dd>
-      </div>
-      <div class="stat">
-        <dt class="sr-only">Years on the baseline</dt>
-        <dd><span class="stat-val">15</span><span class="stat-label">Years on the baseline</span></dd>
-      </div>
-    </dl>
-  </section>
-
-  <!-- =========================== TESTIMONIALS ========================= -->
-  <section class="testimonials" id="testimonials" aria-labelledby="testimonials-title">
-    <span class="eyebrow">What players say</span>
-    <h2 class="section-title" id="testimonials-title">
-      <span class="line"><span class="clip-inner">Loved by</span></span>
-      <span class="line"><span class="clip-inner">the locker room</span></span>
+  <!-- =========================== DEPOIMENTOS ========================== -->
+  <section class="depoimentos" id="depoimentos" aria-labelledby="depoimentos-title">
+    <span class="eyebrow">Quem já estudou por ele</span>
+    <h2 class="section-title" id="depoimentos-title">
+      <span class="line"><span class="clip-inner">Passou usando</span></span>
+      <span class="line"><span class="clip-inner">esse resumo</span></span>
     </h2>
 
     <ul class="testi-grid">
       <li class="testi-item">
         <figure class="testi-card">
           <div>
-            <span class="testi-quote" aria-hidden="true">&ldquo;</span>
-            <blockquote>I added a level to my serve in one season. The coaching is detailed and it actually sticks.</blockquote>
+            <span class="testi-tag">Medicina · 3º semestre</span>
+            <blockquote>Estudei por ele na semana da prova e passei. A correlação clínica foi o que fez os nomes pararem em pé — antes eu decorava e esquecia em dois dias.</blockquote>
           </div>
           <figcaption>
-            <span class="testi-name">Priya Anand</span>
-            <span class="testi-role" style="display:block">Performance Squad</span>
+            <span class="testi-name">Marina Alencar</span>
+            <span class="testi-role">Usou nos sistemas locomotor e nervoso</span>
           </figcaption>
         </figure>
       </li>
       <li class="testi-item">
         <figure class="testi-card">
           <div>
-            <span class="testi-quote" aria-hidden="true">&ldquo;</span>
-            <blockquote>Best courts in the city and a team that treats every member like a competitor.</blockquote>
+            <span class="testi-tag">Enfermagem · 2º ano</span>
+            <blockquote>Ter a figura na mesma página parece bobagem até você usar. Parei de perder o fio virando página atrás da imagem.</blockquote>
           </div>
           <figcaption>
-            <span class="testi-name">Lukas Brenner</span>
-            <span class="testi-role" style="display:block">Adult Clinics</span>
+            <span class="testi-name">Lucas Brenner</span>
+            <span class="testi-role">Comprou o pacote completo</span>
           </figcaption>
         </figure>
       </li>
       <li class="testi-item">
         <figure class="testi-card">
           <div>
-            <span class="testi-quote" aria-hidden="true">&ldquo;</span>
-            <blockquote>My daughter went from shy beginner to club champion. Worth every minute.</blockquote>
+            <span class="testi-tag">Fisioterapia · formada</span>
+            <blockquote>Comprei ainda na faculdade e continuo abrindo hoje pra revisar antes de atender. O de locomotor eu sei de cor de tanto usar.</blockquote>
           </div>
           <figcaption>
-            <span class="testi-name">Dana Okafor</span>
-            <span class="testi-role" style="display:block">Parent, Junior Development</span>
+            <span class="testi-name">Renata Correia</span>
+            <span class="testi-role">Usa como consulta rápida na clínica</span>
           </figcaption>
         </figure>
       </li>
     </ul>
   </section>
 
+  <!-- =============================== FAQ ============================== -->
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <span class="eyebrow">FAQ</span>
+    <h2 class="section-title" id="faq-title">
+      <span class="line"><span class="clip-inner">Perguntas de quem</span></span>
+      <span class="line"><span class="clip-inner">tá pensando em comprar</span></span>
+    </h2>
+
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary>Serve pro meu curso ou é só pra medicina?
+          <span class="faq-toggle" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <p class="faq-answer">Serve para qualquer curso da saúde que tenha anatomia humana na grade: medicina, enfermagem, fisioterapia, educação física, odontologia e biomedicina. O conteúdo é o mesmo corpo; o que muda entre os cursos é a profundidade cobrada na prova, e por isso cada sistema vai do básico ao detalhe.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Como recebo depois de comprar?
+          <span class="faq-toggle" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <p class="faq-answer">O acesso é liberado na hora, assim que o pagamento é confirmado, no e-mail que você usar no checkout. Não tem espera nem envio de material físico.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>É assinatura? Vou ser cobrado de novo?
+          <span class="faq-toggle" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <p class="faq-answer">Não. Os dois pacotes são pagamento único e o acesso não expira. Nenhuma cobrança volta no mês seguinte.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Dá pra imprimir?
+          <span class="faq-toggle" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <p class="faq-answer">Dá. O PDF não tem trava de impressão e o miolo foi diagramado pensando em quem imprime: margem para anotação e nada de fundo colorido que come tinta.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Qual a diferença real entre os dois pacotes?
+          <span class="faq-toggle" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <p class="faq-answer">O conteúdo dos resumos é idêntico nos dois. O Pacote Completo acrescenta os flashcards e o banco de questões — ou seja, as duas ferramentas de fixação. Se você já usa um app de repetição espaçada ou já tem banco de questões da sua faculdade, o pacote de resumos sozinho resolve.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>E se não servir pra mim?
+          <span class="faq-toggle" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <p class="faq-answer">Você tem sete dias para pedir o reembolso integral, mesmo já tendo baixado o material. Basta responder o e-mail da compra dizendo que quer o dinheiro de volta.</p>
+      </details>
+    </div>
+  </section>
+
   <!-- ============================== FOOTER ============================ -->
-  <footer class="footer" id="contact">
+  <footer class="footer" id="contato">
     <div class="footer-cta">
       <div>
-        <span class="eyebrow light">Get started</span>
+        <span class="eyebrow light">Próximo passo</span>
         <p class="footer-cta-title" id="footer-cta-title">
-          <span class="line"><span class="clip-inner">Ready to</span></span>
-          <span class="line"><span class="clip-inner">play?</span></span>
+          <span class="line"><span class="clip-inner">Comece pelo sistema</span></span>
+          <span class="line"><span class="clip-inner">da sua próxima prova</span></span>
         </p>
+        <p class="lede light">Acesso imediato, pagamento único e sete dias de garantia. Se não for o que você esperava, é só pedir o dinheiro de volta.</p>
       </div>
-      <button type="button" class="pill light" id="footer-cta" data-open-modal>
-        <span>Book a Visit</span>
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
+      <div class="footer-cta-actions" id="footer-cta">
+        <a class="pill light" href="#ofertas" data-scroll>
+          <span>Ver os pacotes</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <button type="button" class="pill ghost" data-open-modal>
+          <span>Tirar uma dúvida</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
     </div>
 
     <div class="footer-cols">
       <div class="footer-brand">
         <div class="footer-wordmark">
-          <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/>
-            <path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+          <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 21c-1.2-3.6-3.6-5.4-5.4-7.2A5.4 5.4 0 0 1 12 6.6a5.4 5.4 0 0 1 5.4 7.2c-1.8 1.8-4.2 3.6-5.4 7.2z"/>
+            <path d="M12 6.6V3"/>
           </svg>
-          <span>Baseline</span>
+          <span>Anatomia</span>
         </div>
-        <p class="footer-blurb">A members' tennis club and academy where focused coaching meets championship courts.</p>
+        <p class="footer-blurb">Resumos de anatomia humana para alunos da saúde: doze sistemas, ilustração ao lado do texto e correlação clínica em cada fechamento.</p>
         <address class="footer-address">
-          <a href="mailto:play@baseline.club">play@baseline.club</a>
-          <a href="tel:+12125550148">+1 (212) 555-0148</a>
-          <span class="muted">120 Court Lane, New York</span>
+          <!-- TODO: trocar pelo e-mail real de suporte -->
+          <a href="mailto:contato@resumosdeanatomia.com.br">contato@resumosdeanatomia.com.br</a>
+          <span class="muted">Suporte por e-mail, em até um dia útil</span>
         </address>
       </div>
 
-      <nav aria-label="Programs">
-        <h2 class="footer-colhead">Programs</h2>
+      <nav aria-label="Pacotes">
+        <h2 class="footer-colhead">Pacotes</h2>
         <ul class="footer-links">
-          <li><a href="#junior">Junior Development</a></li>
-          <li><a href="#performance">Performance Squad</a></li>
-          <li><a href="#adult">Adult Clinics</a></li>
-          <li><a href="#private">Private Coaching</a></li>
+          <li><a href="#ofertas" data-scroll>Resumos de Anatomia</a></li>
+          <li><a href="#ofertas" data-scroll>Pacote Completo</a></li>
+          <li><a href="#amostra" data-scroll>Ver por dentro</a></li>
         </ul>
       </nav>
 
-      <nav aria-label="Club">
-        <h2 class="footer-colhead">Club</h2>
+      <nav aria-label="Material">
+        <h2 class="footer-colhead">O material</h2>
         <ul class="footer-links">
-          <li><a href="#membership">Membership</a></li>
-          <li><a href="#facilities">Facilities</a></li>
-          <li><a href="#club">Events</a></li>
-          <li><a href="#shop">Pro Shop</a></li>
+          <li><a href="#sistemas" data-scroll>Sistemas cobertos</a></li>
+          <li><a href="#como" data-scroll>Como usar</a></li>
+          <li><a href="#numeros" data-scroll>Em números</a></li>
+          <li><a href="#depoimentos" data-scroll>Depoimentos</a></li>
         </ul>
       </nav>
 
-      <nav aria-label="Company">
-        <h2 class="footer-colhead">Company</h2>
+      <nav aria-label="Ajuda">
+        <h2 class="footer-colhead">Ajuda</h2>
         <ul class="footer-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#programs">Coaches</a></li>
-          <li><a href="#careers">Careers</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#faq" data-scroll>Dúvidas frequentes</a></li>
+          <li><button type="button" data-open-modal>Falar com a gente</button></li>
+          <li><a href="#faq" data-scroll>Política de reembolso</a></li>
         </ul>
       </nav>
     </div>
 
     <div class="footer-bottom">
-      <p>© 2026 Baseline Tennis Club. All rights reserved.</p>
-      <nav aria-label="Social">
+      <p>© 2026 Resumos de Anatomia. Todos os direitos reservados.</p>
+      <nav aria-label="Redes sociais">
         <a href="#instagram">Instagram</a>
-        <a href="#x">X</a>
+        <a href="#tiktok">TikTok</a>
         <a href="#youtube">YouTube</a>
-        <a href="#linkedin">LinkedIn</a>
       </nav>
       <nav aria-label="Legal">
-        <a href="#privacy">Privacy</a>
-        <a href="#terms">Terms</a>
+        <a href="#privacidade">Privacidade</a>
+        <a href="#termos">Termos</a>
       </nav>
     </div>
   </footer>
@@ -934,14 +1234,13 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
     <div class="menu-inner">
       <div class="menu-top">
         <div class="menu-wordmark">
-          <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/>
-            <path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+          <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 21c-1.2-3.6-3.6-5.4-5.4-7.2A5.4 5.4 0 0 1 12 6.6a5.4 5.4 0 0 1 5.4 7.2c-1.8 1.8-4.2 3.6-5.4 7.2z"/>
+            <path d="M12 6.6V3"/>
           </svg>
-          <span>Baseline</span>
+          <span>Anatomia</span>
         </div>
-        <button type="button" class="iconbtn" id="menu-close" aria-label="Close menu">
+        <button type="button" class="iconbtn" id="menu-close" aria-label="Fechar menu">
           <span class="ic-wrap" style="display:block;width:1.25rem;height:1.25rem">
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
           </span>
@@ -949,71 +1248,77 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
       </div>
 
       <nav class="menu-nav" aria-label="Menu">
-        <a class="menu-link" href="#programs" data-scroll data-close-menu>Programs</a>
-        <a class="menu-link" href="#facilities" data-scroll data-close-menu>Facilities</a>
-        <a class="menu-link" href="#testimonials" data-scroll data-close-menu>Reviews</a>
-        <a class="menu-link" href="#contact" data-scroll data-close-menu>Contact</a>
+        <a class="menu-link" href="#ofertas" data-scroll data-close-menu>Pacotes</a>
+        <a class="menu-link" href="#amostra" data-scroll data-close-menu>Ver por dentro</a>
+        <a class="menu-link" href="#como" data-scroll data-close-menu>Como usar</a>
+        <a class="menu-link" href="#depoimentos" data-scroll data-close-menu>Depoimentos</a>
+        <a class="menu-link" href="#faq" data-scroll data-close-menu>Dúvidas</a>
       </nav>
 
       <div class="menu-bottom">
         <button type="button" class="pill light" id="menu-book">
-          <span>Book a Visit</span>
+          <span>Tirar uma dúvida</span>
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
-        <nav class="menu-social" aria-label="Social">
+        <nav class="menu-social" aria-label="Redes sociais">
           <a href="#instagram">Instagram</a>
-          <a href="#x">X</a>
+          <a href="#tiktok">TikTok</a>
           <a href="#youtube">YouTube</a>
-          <a href="#linkedin">LinkedIn</a>
         </nav>
       </div>
     </div>
   </div>
 </div>
 
-<!-- =========================== CONTACT MODAL ========================== -->
+<!-- ============================ MODAL DÚVIDA ========================= -->
 <div class="modal" id="modal" aria-hidden="true" inert>
   <div class="modal-backdrop" id="modal-backdrop"></div>
   <div class="modal-panel" id="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-head">
       <div>
-        <span class="eyebrow">Book a visit</span>
+        <span class="eyebrow">Antes de comprar</span>
         <h2 class="modal-title" id="modal-title">
-          <span class="line"><span class="clip-inner">Come see</span></span>
-          <span class="line"><span class="clip-inner">the courts</span></span>
+          <span class="line"><span class="clip-inner">Pergunta o</span></span>
+          <span class="line"><span class="clip-inner">que quiser</span></span>
         </h2>
       </div>
-      <button type="button" class="modal-close" id="modal-close" aria-label="Close">
+      <button type="button" class="modal-close" id="modal-close" aria-label="Fechar">
         <span class="ic-wrap" style="display:block;width:1.25rem;height:1.25rem">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </span>
       </button>
     </div>
 
+    <p class="modal-note">Se quiser saber se serve pro seu curso ou pra sua prova, é só perguntar. A gente responde em até um dia útil.</p>
+
     <form class="modal-form" id="modal-form" novalidate>
       <div class="field">
-        <label for="f-name">Full name</label>
-        <input id="f-name" name="name" type="text" placeholder="Alex Rivera" autocomplete="name" />
+        <label for="f-name">Seu nome</label>
+        <input id="f-name" name="name" type="text" placeholder="Alex Ribeiro" autocomplete="name" />
       </div>
       <div class="field">
-        <label for="f-email">Email</label>
-        <input id="f-email" name="email" type="email" placeholder="you@email.com" autocomplete="email" />
+        <label for="f-email">E-mail</label>
+        <input id="f-email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" />
       </div>
       <div class="field">
-        <label for="f-msg">What would you like to play?</label>
-        <textarea id="f-msg" name="message" rows="3" placeholder="I'd love to try a private lesson on the clay courts…"></textarea>
+        <label for="f-curso">Curso e período</label>
+        <input id="f-curso" name="curso" type="text" placeholder="Enfermagem, 2º ano" />
       </div>
-      <button type="submit" class="modal-submit" id="modal-submit">Request a visit</button>
+      <div class="field">
+        <label for="f-msg">Sua dúvida</label>
+        <textarea id="f-msg" name="message" rows="3" placeholder="A prova é de locomotor e neuro. O material cobre nesse nível de detalhe?"></textarea>
+      </div>
+      <button type="submit" class="modal-submit" id="modal-submit">Enviar dúvida</button>
     </form>
 
     <div class="modal-success" id="modal-success" hidden>
       <div class="check" aria-hidden="true">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
       </div>
-      <h3>Request received</h3>
-      <p id="modal-success-text">Thanks, there — our team will be in touch to lock in your visit.</p>
+      <h3>Dúvida recebida</h3>
+      <p id="modal-success-text">Valeu — a gente responde no seu e-mail em até um dia útil.</p>
       <button type="button" class="pill solid" id="modal-done">
-        <span>Done</span>
+        <span>Fechar</span>
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
     </div>
@@ -1023,38 +1328,35 @@ main{width:100%;overflow-x:clip;padding:0.5rem}
 <!-- =============================== LOADER ============================= -->
 <div class="loader" id="loader" role="status" aria-live="polite">
   <div class="loader-wordmark" id="loader-wordmark">
-    <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="9"/>
-      <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/>
-      <path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+    <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 21c-1.2-3.6-3.6-5.4-5.4-7.2A5.4 5.4 0 0 1 12 6.6a5.4 5.4 0 0 1 5.4 7.2c-1.8 1.8-4.2 3.6-5.4 7.2z"/>
+      <path d="M12 6.6V3"/>
     </svg>
-    <span>Baseline</span>
+    <span>Anatomia</span>
   </div>
   <div class="loader-track"><div class="loader-fill" id="loader-fill"></div></div>
-  <span class="sr-only">Loading Baseline</span>
+  <span class="sr-only">Carregando</span>
 </div>
 
 <script type="module">
 /* =====================================================================
-   Baseline — Tennis Club & Academy
-   Single-file build. Motion: tiny rAF spring helper + CSS easings.
+   Resumos de Anatomia — página de vendas. Arquivo único.
+   Motion: helper de mola em rAF + transições CSS.
    ===================================================================== */
 
-/* ------------------------------ constants ------------------------------ */
+/* ------------------------------ constantes ----------------------------- */
 const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
 
-const EXPO       = "cubic-bezier(0.16, 1, 0.3, 1)";      // easeOutExpo
-const QUART      = "cubic-bezier(0.25, 1, 0.5, 1)";      // easeOutQuart
-const INOUTCUBIC = "cubic-bezier(0.65, 0, 0.35, 1)";     // easeInOutCubic
+const EXPO       = "cubic-bezier(0.16, 1, 0.3, 1)";
+const QUART      = "cubic-bezier(0.25, 1, 0.5, 1)";
+const INOUTCUBIC = "cubic-bezier(0.65, 0, 0.35, 1)";
 
 const MIN_VISIBLE_MS = 1400, MAX_VISIBLE_MS = 2600, EXIT_MS = 850;
 
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
 
-const ASSETS = "https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000";
-
-/* --------------------------- adaptive rem grid -------------------------- */
+/* --------------------------- grid rem adaptativo ----------------------- */
 const root = document.documentElement;
 function scaleRoot(){
   const reduction = ((BASE_W - window.innerWidth) / BASE_W) * 100 * COEF;
@@ -1066,7 +1368,7 @@ scaleRoot();
 window.addEventListener("resize", scaleRoot);
 window.scrollTo(0, 0);
 
-/* ------------------------------- springs -------------------------------- */
+/* ------------------------------- molas --------------------------------- */
 const SPRINGS = [];
 
 function applyState(el, s){
@@ -1118,13 +1420,9 @@ class Spring {
     this.render();
   }
   render(){ applyState(this.el, this.state); }
-  destroy(){
-    const i = SPRINGS.indexOf(this);
-    if (i > -1) SPRINGS.splice(i, 1);
-  }
 }
 
-/* ------------------------------- parallax ------------------------------- */
+/* ------------------------------- parallax ------------------------------ */
 const PARALLAX = [];
 function addParallax(section, el, axis, from, to){
   if (REDUCED) return;
@@ -1142,7 +1440,7 @@ function stepParallax(){
   }
 }
 
-/* ------------------------------ rAF driver ------------------------------ */
+/* ------------------------------ loop rAF ------------------------------- */
 let lenis = null;
 let last = performance.now();
 function frame(t){
@@ -1177,7 +1475,7 @@ function unlockScroll(){
     const { default: Lenis } = await import("lenis");
     lenis = new Lenis({ smoothWheel: true });
     if (lockCount > 0) lenis.stop();
-  } catch (e){ /* native scroll fallback */ }
+  } catch (e){ /* fallback pro scroll nativo */ }
 })();
 
 function scrollToHash(hash){
@@ -1195,7 +1493,7 @@ document.querySelectorAll("[data-scroll]").forEach(a => {
   });
 });
 
-/* --------------------------- reveal primitives --------------------------- */
+/* --------------------------- primitivas de reveal ---------------------- */
 function splitWords(el, cls){
   const words = el.textContent.trim().split(/\s+/);
   el.textContent = "";
@@ -1220,10 +1518,7 @@ function splitWords(el, cls){
 }
 
 function runReveal(items, opts){
-  const {
-    stagger = 120, delay = 0, duration = 950,
-    easing = EXPO, outY = "115%"
-  } = opts || {};
+  const { stagger = 120, delay = 0, duration = 950, easing = EXPO, outY = "115%" } = opts || {};
   if (!items.length) return;
   if (REDUCED){
     items.forEach(it => { it.style.transition = "none"; it.style.transform = "translateY(0)"; it.style.opacity = "1"; });
@@ -1246,14 +1541,13 @@ function runReveal(items, opts){
 
 function onceInView(el, cb, threshold = 0.12){
   const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting){ io.disconnect(); cb(); }
-    });
+    entries.forEach(e => { if (e.isIntersecting){ io.disconnect(); cb(); } });
   }, { threshold });
   io.observe(el);
 }
 
 function inview(el, from, to, config, delayIn = 0){
+  if (!el) return null;
   if (REDUCED){ applyState(el, to); return null; }
   const sp = new Spring(el, from, config);
   onceInView(el, () => setTimeout(() => sp.set(to), delayIn));
@@ -1261,7 +1555,7 @@ function inview(el, from, to, config, delayIn = 0){
 }
 
 function hoverSpring(trigger, target, from, to, config){
-  if (isMobile() || REDUCED) return null;
+  if (!target || isMobile() || REDUCED) return null;
   const sp = new Spring(target, from, config);
   const on  = () => sp.set(to);
   const off = () => sp.set(from);
@@ -1272,35 +1566,150 @@ function hoverSpring(trigger, target, from, to, config){
   return sp;
 }
 
+function revealTitle(id, opts){
+  const el = document.getElementById(id);
+  if (!el) return;
+  const items = Array.from(el.querySelectorAll(".clip-inner"));
+  onceInView(el, () => runReveal(items, Object.assign({ stagger: 120, duration: 950, easing: EXPO }, opts)));
+}
+
 /* ================================= HERO ================================== */
 const heroSection = document.querySelector(".hero");
 addParallax(heroSection, document.getElementById("hero-plate-inner"), "y", 0, 12);
 
+/* quem pediu menos movimento fica com o primeiro frame parado (a caixa
+   torácica inteira desenhada), em vez do loop */
+const heroVideo = document.getElementById("hero-video");
+if (heroVideo && REDUCED){
+  heroVideo.removeAttribute("autoplay");
+  heroVideo.removeAttribute("loop");
+  heroVideo.pause();
+}
+
 const heroTitleWords = splitWords(document.getElementById("hero-title"), "clip");
 const heroTagLines = Array.from(document.querySelectorAll("#hero-tag .clip-inner"));
 
-/* --- collection slider --- */
-const COLLECTIONS = [
-  { img: `${ASSETS}/2.webp`, brand: "Baseline Pro",  title: "Featured Gear", cta: "Shop the kit",   alt: "Player driving a backhand on a hard court" },
-  { img: `${ASSETS}/3.webp`, brand: "Court Series",  title: "Summer Drop",   cta: "View the line",  alt: "Player stretching for a forehand on clay" },
-  { img: `${ASSETS}/5.webp`, brand: "Academy Kit",   title: "Junior Range",  cta: "Browse juniors", alt: "Player set in a ready stance on clay" }
+const heroEyebrow = document.getElementById("hero-eyebrow");
+const heroLede = document.getElementById("hero-lede");
+const heroActions = document.getElementById("hero-actions");
+const heroNote = document.querySelector(".hero-note");
+const heroMockup = document.getElementById("hero-mockup");
+
+[heroEyebrow, heroLede, heroActions, heroNote, heroMockup].forEach(el => {
+  if (el) applyState(el, { opacity: 0, y: 24 });
+});
+
+const heroEyebrowSpring = new Spring(heroEyebrow, { opacity: 0, y: 24 }, { tension: 200, friction: 26 });
+const heroLedeSpring    = new Spring(heroLede,    { opacity: 0, y: 24 }, { tension: 200, friction: 26 });
+const heroActionsSpring = new Spring(heroActions, { opacity: 0, y: 24 }, { tension: 200, friction: 26 });
+const heroNoteSpring    = new Spring(heroNote,    { opacity: 0, y: 24 }, { tension: 200, friction: 26 });
+const heroMockupSpring  = new Spring(heroMockup,  { opacity: 0, y: 28 }, { tension: 200, friction: 26 });
+
+function playHero(){
+  setTimeout(() => heroEyebrowSpring.set({ opacity: 1, y: 0 }), REDUCED ? 0 : 80);
+  runReveal(heroTitleWords, { stagger: 140, duration: 1100, easing: EXPO, delay: 180 });
+  runReveal(heroTagLines, { delay: 480, stagger: 110, duration: 900, easing: EXPO });
+  setTimeout(() => heroLedeSpring.set({ opacity: 1, y: 0 }), REDUCED ? 0 : 700);
+  setTimeout(() => heroActionsSpring.set({ opacity: 1, y: 0 }), REDUCED ? 0 : 820);
+  setTimeout(() => heroNoteSpring.set({ opacity: 1, y: 0 }), REDUCED ? 0 : 920);
+  setTimeout(() => heroMockupSpring.set({ opacity: 1, y: 0 }), REDUCED ? 0 : 780);
+}
+
+/* ================================ MÉTODO ================================= */
+revealTitle("metodo-title");
+document.querySelectorAll(".diff-card").forEach((card, i) => {
+  inview(card, { opacity: 0, y: 28 }, { opacity: 1, y: 0 }, { tension: 190, friction: 26 }, i * 90);
+});
+
+/* ================================= COMO ================================== */
+revealTitle("como-title");
+document.querySelectorAll(".step-list li").forEach((li, i) => {
+  inview(li.querySelector(".step-inner"), { opacity: 0, y: 26 }, { opacity: 1, y: 0 }, { tension: 190, friction: 26 }, i * 90);
+});
+
+/* ================================ AMOSTRA ================================ */
+inview(document.getElementById("amostra-icon"), { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1 }, { tension: 240, friction: 20 });
+revealTitle("amostra-title");
+
+const amostraWords = splitWords(document.getElementById("amostra-body"), "word");
+onceInView(document.getElementById("amostra-body"), () => {
+  runReveal(amostraWords, { stagger: 28, delay: 250, duration: 700, easing: QUART, outY: "18px" });
+});
+
+document.querySelectorAll(".sample-card").forEach((card, i) => {
+  inview(card, { opacity: 0, y: 48 }, { opacity: 1, y: 0 }, { tension: 180, friction: 26 }, i * 140);
+  hoverSpring(card, card.querySelector("img"), { scale: 1 }, { scale: 1.03 }, { tension: 300, friction: 22 });
+});
+
+/* ================================ NÚMEROS ================================ */
+revealTitle("numeros-title");
+document.querySelectorAll(".stat").forEach((cell, i) => {
+  inview(cell, { opacity: 0, y: 30 }, { opacity: 1, y: 0 }, { tension: 180, friction: 24 }, i * 110);
+});
+
+/* ================================ OFERTAS ================================ */
+revealTitle("ofertas-title");
+document.querySelectorAll(".offer-card").forEach((card, i) => {
+  inview(card, { opacity: 0, y: 44 }, { opacity: 1, y: 0 }, { tension: 180, friction: 26 }, i * 120);
+});
+inview(document.querySelector(".guarantee"), { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, { tension: 200, friction: 26 }, 240);
+
+/*
+  Botões de compra.
+  Enquanto o href for "#", o clique abre o modal de dúvida em vez de quebrar
+  a navegação. Troque o href pela URL de checkout de cada pacote e este
+  fallback deixa de valer sozinho.
+*/
+document.querySelectorAll("[data-checkout]").forEach(btn => {
+  btn.addEventListener("click", e => {
+    const href = btn.getAttribute("href");
+    if (href && href !== "#") return; // URL real configurada: segue o link
+    e.preventDefault();
+    openModal();
+  });
+});
+
+/* =============================== SISTEMAS ================================ */
+/* TODO: trocar os src por páginas de amostra reais de cada sistema */
+const PLACEHOLDER = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+const SISTEMAS = [
+  { img: PLACEHOLDER, name: "Sistema locomotor",     sub: "Osso, músculo e articulação",     alt: "Página do resumo do sistema locomotor",     headline: ["Estuda", "Menos", "Lembra", "Mais"] },
+  { img: PLACEHOLDER, name: "Sistema cardiovascular", sub: "Coração, artéria e veia",         alt: "Página do resumo do sistema cardiovascular", headline: ["Imagem", "Junto", "Do", "Texto"] },
+  { img: PLACEHOLDER, name: "Sistema nervoso",        sub: "Central, periférico e autônomo",  alt: "Página do resumo do sistema nervoso",        headline: ["Clínica", "Em", "Cada", "Sistema"] }
 ];
 
-const collStage = document.getElementById("coll-stage");
-const collDotsEl = document.getElementById("coll-dots");
+const sisSection = document.getElementById("sistemas");
+const ghostWords = Array.from(document.querySelectorAll(".ghost-word"));
+const ghostInners = ghostWords.map(w => w.querySelector(".clip-inner"));
+const sisFig = document.getElementById("sis-fig");
+const sisImg = document.getElementById("sis-img");
+const sisName = document.getElementById("sis-name");
+const sisRole = document.getElementById("sis-role");
+const sisSr = document.getElementById("sistemas-title-sr");
 
-function collCard(data){
-  const el = document.createElement("div");
-  el.className = "coll-card";
-  el.innerHTML = `
-    <img class="coll-thumb" src="${data.img}" alt="${data.alt}" loading="lazy" decoding="async" />
-    <div>
-      <p class="coll-brand">${data.brand}</p>
-      <p class="coll-title">${data.title}</p>
-      <a class="coll-cta" href="#shop">${data.cta} →</a>
-    </div>`;
-  return el;
+const GHOST_PARALLAX = [[-3, 3], [3, -3], [-2, 4], [4, -3]];
+ghostWords.forEach((w, i) => addParallax(sisSection, w, "x", GHOST_PARALLAX[i][0], GHOST_PARALLAX[i][1]));
+
+const sisPhotoSpring = new Spring(sisImg, { opacity: 1 }, { tension: 260, friction: 26 });
+
+let sisIndex = 0;
+function paintSistema(i, animate){
+  const s = SISTEMAS[i];
+  ghostInners.forEach((inner, k) => { inner.textContent = s.headline[k]; });
+  sisSr.textContent = s.headline.join(" ");
+  sisName.textContent = s.name;
+  sisRole.textContent = s.sub;
+  sisImg.src = s.img;
+  sisImg.alt = s.alt;
+  sisFig.setAttribute("data-ph", s.name);
+  if (animate){
+    runReveal(ghostInners, { stagger: 90, duration: 700, easing: EXPO });
+    sisPhotoSpring.state.opacity = 0;
+    sisPhotoSpring.render();
+    sisPhotoSpring.set({ opacity: 1 });
+  }
 }
+paintSistema(0, false);
 
 function makeDots(container, count, onSelect, labelFor){
   const btns = [];
@@ -1319,202 +1728,53 @@ function makeDots(container, count, onSelect, labelFor){
   });
 }
 
-let collIndex = 0;
-let collCurrent = collCard(COLLECTIONS[0]);
-collStage.appendChild(collCurrent);
-const setCollDots = makeDots(
-  collDotsEl,
-  COLLECTIONS.length,
-  i => { setColl(i); startCollAutoplay(); },
-  i => `Collection ${i + 1}`
+const setSisDots = makeDots(
+  document.getElementById("sis-dots"),
+  SISTEMAS.length,
+  i => setSistema(i),
+  i => `Ver sistema ${i + 1}`
 );
-setCollDots(0);
+setSisDots(0);
 
-let collCleanup = null;
-function runCollCleanup(){
-  if (!collCleanup) return;
-  const fn = collCleanup;
-  collCleanup = null;
-  fn();
+function setSistema(next){
+  if (next === sisIndex) return;
+  sisIndex = (next + SISTEMAS.length) % SISTEMAS.length;
+  setSisDots(sisIndex);
+  paintSistema(sisIndex, true);
 }
+document.getElementById("sis-prev").addEventListener("click", () => setSistema(sisIndex - 1));
+document.getElementById("sis-next").addEventListener("click", () => setSistema(sisIndex + 1));
 
-function setColl(next){
-  if (next === collIndex) return;
-  collIndex = next;
-  setCollDots(collIndex);
-  runCollCleanup(); // settle any in-flight transition before starting a new one
-
-  const outgoing = collCurrent;
-  outgoing.classList.add("is-out");
-  const incoming = collCard(COLLECTIONS[collIndex]);
-  collStage.appendChild(incoming);
-  collCurrent = incoming;
-
-  if (REDUCED){ outgoing.remove(); return; }
-
-  const outSpring = new Spring(outgoing, { opacity: 1, y: 0, scale: 1 }, { tension: 210, friction: 24 });
-  outSpring.set({ opacity: 0, y: 16, scale: 0.96 });
-
-  const inSpring = new Spring(incoming, { opacity: 0, y: 16, scale: 0.96 }, { tension: 210, friction: 24 });
-  requestAnimationFrame(() => inSpring.set({ opacity: 1, y: 0, scale: 1 }));
-
-  // both springs have settled well inside this window — retire them so the
-  // pool does not grow with every autoplay tick
-  collCleanup = () => {
-    clearTimeout(cleanupTimer);
-    outSpring.destroy();
-    outgoing.remove();
-    inSpring.destroy();
-    applyState(incoming, { opacity: 1, y: 0, scale: 1 });
-  };
-  const cleanupTimer = setTimeout(runCollCleanup, 1200);
-}
-
-let collTimer = null;
-function startCollAutoplay(){
-  if (REDUCED) return;
-  clearInterval(collTimer);
-  collTimer = setInterval(() => setColl((collIndex + 1) % COLLECTIONS.length), 3800);
-}
-
-/* --- hero gated entrances --- */
-const collectionEl = document.getElementById("collection");
-const memberEl = document.getElementById("member");
-applyState(collectionEl, { opacity: 0, y: 28 });
-applyState(memberEl, { opacity: 0, y: 28 });
-const collectionSpring = new Spring(collectionEl, { opacity: 0, y: 28 }, { tension: 200, friction: 26 });
-const memberSpring = new Spring(memberEl, { opacity: 0, y: 28 }, { tension: 200, friction: 26 });
-
-function playHero(){
-  runReveal(heroTitleWords, { stagger: 140, duration: 1100, easing: EXPO });
-  runReveal(heroTagLines, { delay: 350, stagger: 110, duration: 900, easing: EXPO });
-  setTimeout(() => collectionSpring.set({ opacity: 1, y: 0 }), REDUCED ? 0 : 650);
-  setTimeout(() => memberSpring.set({ opacity: 1, y: 0 }), REDUCED ? 0 : 780);
-  startCollAutoplay();
-}
-
-/* ================================= TRUST ================================= */
-const COACHES = [
-  { img: `${ASSETS}/5.webp`, name: "Marco Vidal",     role: "Head Coach",        alt: "Head coach set in a ready stance on clay",        headline: ["Expert", "Result-", "Driven", "Coaching"] },
-  { img: `${ASSETS}/4.webp`, name: "Elena Sokolova",  role: "Performance Coach", alt: "Performance coach following through on a serve",  headline: ["Sharper", "Faster", "Stronger", "Player"] },
-  { img: `${ASSETS}/1.webp`, name: "James Okoro",     role: "Juniors Lead",      alt: "Juniors lead waiting to return on clay",          headline: ["Future", "Champions", "Start", "Here"] }
-];
-
-const trustSection = document.getElementById("trust");
-const ghostWords = Array.from(document.querySelectorAll(".ghost-word"));
-const ghostInners = ghostWords.map(w => w.querySelector(".clip-inner"));
-const coachImg = document.getElementById("coach-img");
-const coachName = document.getElementById("coach-name");
-const coachRole = document.getElementById("coach-role");
-const trustSr = document.getElementById("trust-title-sr");
-
-const GHOST_PARALLAX = [[-3, 3], [3, -3], [-2, 4], [4, -3]];
-ghostWords.forEach((w, i) => addParallax(trustSection, w, "x", GHOST_PARALLAX[i][0], GHOST_PARALLAX[i][1]));
-
-const coachPhotoSpring = new Spring(coachImg, { opacity: 1 }, { tension: 260, friction: 26 });
-
-let coachIndex = 0;
-function paintCoach(i, animate){
-  const c = COACHES[i];
-  ghostInners.forEach((inner, k) => { inner.textContent = c.headline[k]; });
-  trustSr.textContent = c.headline.join(" ");
-  coachName.textContent = c.name;
-  coachRole.textContent = c.role;
-  coachImg.src = c.img;
-  coachImg.alt = c.alt;
-  if (animate){
-    runReveal(ghostInners, { stagger: 90, duration: 700, easing: EXPO });
-    coachPhotoSpring.state.opacity = 0;
-    coachPhotoSpring.render();
-    coachPhotoSpring.set({ opacity: 1 });
-  }
-}
-paintCoach(0, false);
-
-const setCoachDots = makeDots(
-  document.getElementById("coach-dots"),
-  COACHES.length,
-  i => setCoach(i),
-  i => `Show coach ${i + 1}`
-);
-setCoachDots(0);
-
-function setCoach(next){
-  if (next === coachIndex) return;
-  coachIndex = (next + COACHES.length) % COACHES.length;
-  setCoachDots(coachIndex);
-  paintCoach(coachIndex, true);
-}
-document.getElementById("coach-prev").addEventListener("click", () => setCoach(coachIndex - 1));
-document.getElementById("coach-next").addEventListener("click", () => setCoach(coachIndex + 1));
-
-onceInView(document.getElementById("trust-title"), () => {
-  runReveal(ghostInners, { stagger: 0, duration: 700, easing: EXPO });
+onceInView(document.getElementById("sistemas-title"), () => {
+  runReveal(ghostInners, { stagger: 90, duration: 700, easing: EXPO });
 });
 
 inview(document.getElementById("pct-badge"), { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1 }, { tension: 220, friction: 22 });
-inview(document.getElementById("badge-card"), { opacity: 0, y: 24 }, { opacity: 1, y: 0 }, { tension: 200, friction: 26 }, 120);
-inview(document.getElementById("coach-inview"), { opacity: 0, y: 60, scale: 0.92 }, { opacity: 1, y: 0, scale: 1 }, { tension: 170, friction: 26 });
+inview(document.getElementById("autor-card"), { opacity: 0, y: 24 }, { opacity: 1, y: 0 }, { tension: 200, friction: 26 }, 120);
+inview(document.getElementById("sis-inview"), { opacity: 0, y: 60, scale: 0.92 }, { opacity: 1, y: 0, scale: 1 }, { tension: 170, friction: 26 });
 
-/* arrow-button hover scale */
 document.querySelectorAll(".arrowbtn").forEach(btn => {
   hoverSpring(btn, btn.querySelector(".ic-wrap"), { scale: 1 }, { scale: 1.15 }, { tension: 320, friction: 18 });
 });
 
-/* =============================== PROGRAMS ================================ */
-onceInView(document.getElementById("programs-title"), () => {
-  runReveal(Array.from(document.querySelectorAll("#programs-title .clip-inner")), { stagger: 120, duration: 950, easing: EXPO });
-});
-
-document.querySelectorAll(".prog-list li").forEach((li, i) => {
-  const row = li.querySelector(".prog-row");
-  const inner = li.querySelector(".prog-inner");
-  inview(inner, { opacity: 0, y: 26 }, { opacity: 1, y: 0 }, { tension: 190, friction: 26 }, i * 90);
-  hoverSpring(row, li.querySelector(".prog-arrow"), { x: 0, opacity: 0.55 }, { x: 8, opacity: 1 }, { tension: 300, friction: 20 });
-});
-
-/* =============================== FACILITIES ============================== */
-inview(document.getElementById("fac-icon"), { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1 }, { tension: 240, friction: 20 });
-
-onceInView(document.getElementById("facilities-title"), () => {
-  runReveal(Array.from(document.querySelectorAll("#facilities-title .clip-inner")), { stagger: 120, duration: 950, easing: EXPO });
-});
-
-const facBodyWords = splitWords(document.getElementById("fac-body"), "word");
-onceInView(document.getElementById("fac-body"), () => {
-  runReveal(facBodyWords, { stagger: 28, delay: 250, duration: 700, easing: QUART, outY: "18px" });
-});
-
-document.querySelectorAll(".fac-card").forEach((card, i) => {
-  inview(card, { opacity: 0, y: 48 }, { opacity: 1, y: 0 }, { tension: 180, friction: 26 }, i * 140);
-  hoverSpring(card, card.querySelector("img"), { scale: 1 }, { scale: 1.03 }, { tension: 300, friction: 22 });
-});
-
-/* ================================= STATS ================================= */
-onceInView(document.getElementById("stats-title"), () => {
-  runReveal(Array.from(document.querySelectorAll("#stats-title .clip-inner")), { stagger: 120, duration: 950, easing: EXPO });
-});
-document.querySelectorAll(".stat").forEach((cell, i) => {
-  inview(cell, { opacity: 0, y: 30 }, { opacity: 1, y: 0 }, { tension: 180, friction: 24 }, i * 110);
-});
-
-/* ============================= TESTIMONIALS ============================== */
-onceInView(document.getElementById("testimonials-title"), () => {
-  runReveal(Array.from(document.querySelectorAll("#testimonials-title .clip-inner")), { stagger: 120, duration: 950, easing: EXPO });
-});
+/* ============================== DEPOIMENTOS ============================== */
+revealTitle("depoimentos-title");
 document.querySelectorAll(".testi-item").forEach((item, i) => {
   inview(item, { opacity: 0, y: 40 }, { opacity: 1, y: 0 }, { tension: 180, friction: 26 }, i * 120);
   const card = item.querySelector(".testi-card");
   hoverSpring(card, card, { y: 0 }, { y: -8 }, { tension: 300, friction: 22 });
 });
 
-/* ================================ FOOTER ================================= */
-onceInView(document.getElementById("footer-cta-title"), () => {
-  runReveal(Array.from(document.querySelectorAll("#footer-cta-title .clip-inner")), { stagger: 120, duration: 950, easing: EXPO });
+/* ================================== FAQ ================================== */
+revealTitle("faq-title");
+document.querySelectorAll(".faq-item").forEach((item, i) => {
+  inview(item, { opacity: 0, y: 22 }, { opacity: 1, y: 0 }, { tension: 200, friction: 26 }, i * 60);
 });
+
+/* ================================ FOOTER ================================= */
+revealTitle("footer-cta-title");
 inview(document.getElementById("footer-cta"), { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, { tension: 200, friction: 24 }, 150);
 
-/* pill arrow hover nudge */
 document.querySelectorAll(".pill").forEach(p => {
   hoverSpring(p, p.querySelector(".ic"), { x: 0 }, { x: 5 }, { tension: 320, friction: 20 });
 });
@@ -1563,7 +1823,7 @@ document.getElementById("menu-close").addEventListener("click", closeMenu);
 menuBackdrop.addEventListener("click", closeMenu);
 document.querySelectorAll("[data-close-menu]").forEach(a => a.addEventListener("click", closeMenu));
 
-/* =============================== MODAL ================================== */
+/* ================================= MODAL ================================= */
 const modalEl = document.getElementById("modal");
 const modalBackdrop = document.getElementById("modal-backdrop");
 const modalPanel = document.getElementById("modal-panel");
@@ -1607,7 +1867,7 @@ function closeModal(){
     modalForm.hidden = false;
     modalSuccess.hidden = true;
     modalSubmit.disabled = false;
-    modalSubmit.textContent = "Request a visit";
+    modalSubmit.textContent = "Enviar dúvida";
   }, 350);
 }
 document.querySelectorAll("[data-open-modal]").forEach(b => b.addEventListener("click", openModal));
@@ -1616,23 +1876,24 @@ document.getElementById("modal-close").addEventListener("click", closeModal);
 document.getElementById("modal-done").addEventListener("click", closeModal);
 modalBackdrop.addEventListener("click", closeModal);
 
-/* X icon rotate on hover */
 [document.getElementById("modal-close"), document.getElementById("menu-close")].forEach(btn => {
   hoverSpring(btn, btn.querySelector(".ic-wrap"), { rotate: 0 }, { rotate: 90 }, { tension: 300, friction: 18 });
 });
 
-/* stubbed submit — never hits the network */
+/* envio é stub local — não chama servidor nenhum */
 modalForm.addEventListener("submit", e => {
   e.preventDefault();
   modalSubmit.disabled = true;
-  modalSubmit.textContent = "Sending…";
-  const first = (nameField.value.trim().split(/\s+/)[0] || "there");
+  modalSubmit.textContent = "Enviando…";
+  const first = (nameField.value.trim().split(/\s+/)[0] || "");
   setTimeout(() => {
-    modalSuccessText.textContent = `Thanks, ${first} — our team will be in touch to lock in your visit.`;
+    modalSuccessText.textContent = first
+      ? `Valeu, ${first} — a gente responde no seu e-mail em até um dia útil.`
+      : "Valeu — a gente responde no seu e-mail em até um dia útil.";
     modalForm.hidden = true;
     modalSuccess.hidden = false;
     modalSubmit.disabled = false;
-    modalSubmit.textContent = "Request a visit";
+    modalSubmit.textContent = "Enviar dúvida";
     document.getElementById("modal-done").focus();
   }, 700);
 });
@@ -1643,7 +1904,7 @@ document.addEventListener("keydown", e => {
   else if (menuOpen) closeMenu();
 });
 
-/* ================================ LOADER ================================= */
+/* ================================= LOADER ================================ */
 const loaderEl = document.getElementById("loader");
 const loaderFill = document.getElementById("loader-fill");
 const loaderWordmark = document.getElementById("loader-wordmark");
@@ -1679,10 +1940,7 @@ function reveal(){
   playHero();
   unlockScroll();
 
-  if (EXIT === 0){
-    loaderEl.remove();
-    return;
-  }
+  if (EXIT === 0){ loaderEl.remove(); return; }
   loaderEl.style.transition = `transform ${EXIT}ms ${INOUTCUBIC}`;
   loaderEl.style.transform = "translateY(-105%)";
   setTimeout(() => loaderEl.remove(), EXIT);
